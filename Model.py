@@ -7,3 +7,6 @@ class Model:
   def get_probability(word, history):
     assert True is False
 
+  def train(filename):
+    assert True is False
+
