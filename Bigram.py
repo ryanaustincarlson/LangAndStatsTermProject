@@ -17,7 +17,7 @@ def main():
   print model.get_probability('CC', ['NNP','RB'])
   print model.get_probability('NN', ['NNP','RB'])
   print model.get_probability('RB', ['NNP','RB'])
-  print model.get_probability('<COMMA>', ['NNP','RB']) # should throw an error
+  print model.get_probability('<COMMA>', ['NNP','RB'])
 
 if __name__ == '__main__':
   main()
