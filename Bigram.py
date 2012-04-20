@@ -1,8 +1,8 @@
 from NgramModel import NgramModel
 
 class Bigram(NgramModel):
-  def __init__(self):
-    NgramModel.__init__(self, 2)
+  def __init__(self, filename=None):
+    NgramModel.__init__(self, 2, filename)
 
 def main():
   import sys
