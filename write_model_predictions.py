@@ -23,7 +23,7 @@ def get_output_filename(output_dir, dev_filename, model_name):
 def main():
   logging.basicConfig(level=LOGGING_LEVEL, format="DEBUG: %(message)s")
 
-  if len(sys.argv) < or len(sys.argv) > 4:
+  if len(sys.argv) < 3 or len(sys.argv) > 4:
     print 'usage: %s training-file dev-file [output-dir]' % sys.argv[0]
     print '       output-dir is optional, default is "output"'
     sys.exit(1)
@@ -32,7 +32,7 @@ def main():
   dev_filename = sys.argv[2]
   try:
     output_dir = sys.argv[3] 
-  else:
+  except IndexError:
     output_dir = 'output'
 
   logging.debug('Training models...')
