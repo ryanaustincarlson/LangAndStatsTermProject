@@ -7,6 +7,8 @@ from Unigram import Unigram
 from Bigram import Bigram 
 from Trigram import Trigram
 
+OUTPUT_DIR_DEFAULT = 'output'
+
 # turn logging on or off
 LOGGING_LEVEL = logging.DEBUG; #LOGGING_LEVEL = None
 
@@ -25,15 +27,12 @@ def main():
 
   if len(sys.argv) < 3 or len(sys.argv) > 4:
     print 'usage: %s training-file dev-file [output-dir]' % sys.argv[0]
-    print '       output-dir is optional, default is "output"'
+    print '       output-dir is optional, default is "%s"' % OUTPUT_DIR_DEFAULT
     sys.exit(1)
 
   training_filename = sys.argv[1]
   dev_filename = sys.argv[2]
-  try:
-    output_dir = sys.argv[3] 
-  except IndexError:
-    output_dir = 'output'
+  output_dir = sys.argv[3] if len(sys.argv) == 4 else OUTPUT_DIR_DEFAULT
 
   logging.debug('Training models...')
 
