@@ -10,7 +10,7 @@ class Maxent(Model):
         Model.__init__(self)
 
     def get_probability(self, word, history):
-        feature = self.generate_feature(history)
+        feature = self.generate_feature(word, history)
         prob_dist = self.model.prob_classify(feature)
         return prob_dist.prob(word)
 
@@ -36,6 +36,8 @@ class Maxent(Model):
         return [method for method in dir(self) if callable(getattr(self, method))
                                                and method.startswith('feature')]
 
+    # Define feature functions below:
+    # The method names MUST start with 'feature'
     def feature_contains_NNP(self, word, history):
         return {'nnp': 'NNP' in history}
 
