@@ -93,13 +93,6 @@ def main():
         sys.exit(1)
 
     fnames = sys.argv[1:]
-    prob_streams = []
-    for fname in fnames:
-        data = open(fname, 'r').readlines()
-        data = np.array(map(lambda num: float(num), data))
-        prob_streams.append(data)
-
-    fnames = sys.argv[1:]
     prob_streams = [read_probs_file(fname) for fname in fnames]
 
     em = DegenerateEM(prob_streams, debug=True)
