@@ -8,6 +8,7 @@ from Model import Model
 class Maxent(Model):
     def __init__(self):
         Model.__init__(self)
+        self.feature_functions = self.load_feature_functions()
 
     def get_probability(self, word, history):
         feature = self.generate_feature(word, history)
@@ -28,18 +29,22 @@ class Maxent(Model):
 
     def generate_feature(self, word, history):
         feature = {}
-        for func in self.load_feature_functions():
-            feature.update( getattr(self, func)(word, history) )
+        for func in self.feature_functions:
+            feature.update( func(word, history) )
         return feature
 
     def load_feature_functions(self):
-        return [method for method in dir(self) if callable(getattr(self, method))
-                                               and method.startswith('feature')]
+        return [getattr(self, method) for method in dir(self)
+                if callable(getattr(self, method))
+                and method.startswith('feature')]
 
     # Define feature functions below:
     # The method names MUST start with 'feature'
     def feature_contains_NNP(self, word, history):
         return {'nnp': 'NNP' in history}
+
+    def feature_contains_RB(self, word, history):
+        return {'rb':  'RB' in history}
 
 def main():
     if len(sys.argv) != 2:
