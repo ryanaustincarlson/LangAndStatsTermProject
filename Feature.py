@@ -26,8 +26,9 @@ if __name__ == '__main__':
     word = 'NNP'
     history = ['FOO', 'DT', 'NNP', 'BAR', 'BAZ']
 
-    feature = {}
+    features = []
     for func in methods:
-        feature[func.__name__] = func(word, history)
+        val = func(word, history)
+        features.append((func.__name__, val))
 
-    print feature
+    print features

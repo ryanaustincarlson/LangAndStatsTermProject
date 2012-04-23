@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import sys
-from nltk.classify import MaxentClassifier
+import maxent
+from maxent.cmaxent import MaxentModel
 
 from Model import Model
 from Feature import Feature
@@ -13,33 +14,48 @@ class Maxent(Model):
         self.history_length    = history_length
 
     def get_probability(self, word, history):
-        feature = self.generate_feature(word, history)
-        prob_dist = self.model.prob_classify(feature)
-        return prob_dist.prob(word)
+        features = self.generate_features(word, history)
+        prob_dist = self.model.eval_all(features)
 
-    def train(self, filename):
+        for tag, prob in prob_dist:
+            if tag == word:
+                return prob
+        return 0.0
+
+    def load_data(self, filename):
         words = [line.strip() for line in open(filename, 'r')]
-        train_feats = []
 
         for index in xrange(len(words)):
             word = words[index]
             start_index = index - self.history_length \
                 if index - self.history_length > 0 else 0 # look at the most recent N tags
             history = words[start_index:index]
-            train_feats.append( (self.generate_feature(word, history), word) )
+            yield word, history
 
-        self.model = MaxentClassifier.train(train_feats, algorithm='iis', trace=0,
-                                            max_iter=1, min_lldelta=0.5)
+    def train(self, filename):
+        data = self.load_data(filename)
+        m = MaxentModel()
 
-    def generate_feature(self, word, history):
-        feature = {}
+        m.begin_add_event()
+        for word, history in data:
+            features = self.generate_features(word, history)
+            m.add_event(features, word)
+        m.end_add_event()
+
+        m.train()
+        self.model = m
+
+    def generate_features(self, word, history):
+        features = []
         for func in self.feature_functions:
-            feature[func.__name__] = func(word, history)
-        return feature
+            val = func(word, history)
+            features.append((func.__name__, val))
+        return features
 
     def load_feature_functions(self):
         return [getattr(Feature, method) for method in dir(Feature)
                 if callable(getattr(Feature, method))]
+
 
 def main():
     if len(sys.argv) != 2:
