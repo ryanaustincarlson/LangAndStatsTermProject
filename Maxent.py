@@ -21,7 +21,8 @@ class Maxent(Model):
 
         for index in xrange(len(words)):
             word    = words[index]
-            history = words[:index]
+            start_index = index - 30 if index - 30 > 0 else 0 # look at the most recent 30 tags
+            history = words[start_index:index]
             train_feats.append( (self.generate_feature(word, history), word) )
 
         self.model = MaxentClassifier.train(train_feats, algorithm='iis', trace=0,
