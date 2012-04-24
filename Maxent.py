@@ -14,7 +14,7 @@ class Maxent(Model):
         self.history_length    = history_length
 
     def get_probability(self, word, history):
-        features = self.generate_features(word, history)
+        features  = self.generate_features(word, history)
         prob_dist = self.model.eval_all(features)
 
         for tag, prob in prob_dist:
@@ -46,11 +46,18 @@ class Maxent(Model):
         self.model = m
 
     def generate_features(self, word, history):
+        history  = self.pad_history(history)
         features = []
         for func in self.feature_functions:
             val = func(word, history)
             features.append((func.__name__, val))
         return features
+
+    def pad_history(self, history):
+        """Pads 'START' tag if history length is less than history_length"""
+        if len(history) < self.history_length:
+            history = ['START'] * (self.history_length - len(history)) + history
+        return history
 
     def load_feature_functions(self):
         return [getattr(Feature, method) for method in dir(Feature)
