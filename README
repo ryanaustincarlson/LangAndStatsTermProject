@@ -7,3 +7,14 @@ Dependencies:
 - nltk (http://www.nltk.org/)
 - Maximum Entropy Modeling Toolkit for Python and C++ (http://homepages.inf.ed.ac.uk/lzhang10/maxent_toolkit.html)
 
+Features:
+
+  Naoki:
+    -> TAG counts in history
+    -> distance from last TAG
+
+  Ryan:
+    -> subsets of 3
+
+  Peter:
+    -> grammar rules
