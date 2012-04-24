@@ -7,3 +7,18 @@ Dependencies:
 - nltk (http://www.nltk.org/)
 - Maximum Entropy Modeling Toolkit for Python and C++ (http://homepages.inf.ed.ac.uk/lzhang10/maxent_toolkit.html)
 
+Stuff to do:
+
+  Naoki:
+    -> TAG counts in history (feature)
+    -> distance from last TAG (feature)
+    -> fix Features module
+
+  Ryan:
+    -> subsets of 3 (feature)
+    -> interpolation interface
+
+  Peter:
+    -> grammar rules (feature)
+    -> test code (average log likelihood)
+    -> compile script

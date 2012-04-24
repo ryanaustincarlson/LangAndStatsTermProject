@@ -18,6 +18,10 @@ class Feature:
     def contains_DT(word, history):
         return 'DT' in history
 
+    @staticmethod
+    def follows_JJ(word, history):
+        return history[-1] == 'JJ'
+
 
 if __name__ == '__main__':
     methods = [getattr(Feature, method) for method in dir(Feature)
