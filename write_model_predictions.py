@@ -15,7 +15,7 @@ LOGGING_LEVEL = logging.DEBUG; #LOGGING_LEVEL = None
 # want the format of output to be
 #   output_dir/dev_filename-model_name.probs
 def get_output_filename(output_dir, dev_filename, model_name):
-  file_ext_index = dev_filename.find('.'); directory_index = dev_filename.rfind('/')
+  file_ext_index = dev_filename.rfind('.'); directory_index = dev_filename.rfind('/')
   if file_ext_index > 0: dev_filename = dev_filename[:file_ext_index]
   if directory_index > 0: dev_filename = dev_filename[directory_index+1:]
   if not output_dir.endswith('/'): output_dir += '/'
