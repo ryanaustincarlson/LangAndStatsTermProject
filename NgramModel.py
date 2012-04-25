@@ -30,22 +30,6 @@ class NgramModel(Model):
       return self.model.prob(word, history)
     except Exception:
       raise NgramModelException("word (%s) not found in history (%s)" % (word, history))
-
-  def probability_list(self, words):
-    def probability_or_zero(word, history):
-      """ if probability exists, return it; otherwise, assign zero probability """
-      try:
-        return self.get_probability(word, history)
-      except NgramModelException:
-        return 0
-    return [probability_or_zero(words[index],words[:index]) for index in xrange(len(words))]
-
-  def write_probability_list(self, words, outfilename):
-    probability_list = self.probability_list(words)
-    outfile = open(outfilename, 'w')
-    for prob in probability_list:
-      outfile.write('{}\n'.format(prob))
-    outfile.close()
     
 def main():
   from pprint import pprint
