@@ -7,7 +7,7 @@ MAXENT_URL='https://github.com/lzhang10/maxent.git'
 BUILD_DIR=build
 PYYAML_DIR=$(basename $PYYAML_URL | perl -npe 's/\.tar\.gz//')
 NLTK_DIR=$(basename $NLTK_URL | perl -npe 's/\.tar\.gz//')
-MAXENT_DIR=$(basename $MAXENT_URL | perl -npe 's/\.get//')
+MAXENT_DIR=$(basename $MAXENT_URL | perl -npe 's/\.git//')
 
 [ -d $BUILD_DIR ] || mkdir $BUILD_DIR
 
