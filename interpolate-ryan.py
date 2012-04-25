@@ -96,6 +96,8 @@ def run_algorithm_until_convergence(probability_models, initial_weights, converg
     iteration += 1
     print
 
+  return new_weights
+
 def count_zeros(probabilities):
   print 'zero counts:', [sum((1 for prob in prob_model if prob == 0)) for prob_model in probabilities]
 
@@ -108,19 +110,34 @@ def main():
     sys.exit(1)
 
   fnames = sys.argv[1:]
+
+  directory = ''
+  if '/' in fnames[0]:
+    directory = fnames[0][:fnames[0].rfind('/')+1]
+
+  models_file = open(directory + 'model-order.txt', 'w')
+  for fname in fnames: models_file.write(fname + '\n')
+  models_file.close()
+  print 'Model order written to {}'.format(models_file.name)
+
   probabilities = [read_probs_file(fname) for fname in fnames]
 
   #probabilities = [probabilities[0], probabilities[1], probabilities[0]]
 
-  uniform_model = [1.0/4000]*len(probabilities[0])
-  probabilities.append(uniform_model)
+  #uniform_model = [1.0/4000]*len(probabilities[0])
+  #probabilities.append(uniform_model)
 
   #count_zeros(probabilities)
 
   weights = randomly_generate_weights(len(probabilities))
-  convergence_num = 0.001
+  convergence_num = 0.0001
 
-  run_algorithm_until_convergence(probabilities, weights, convergence_num)
+  weights = run_algorithm_until_convergence(probabilities, weights, convergence_num)
+
+  weights_file = open(directory + 'weights.txt', 'w')
+  for weight in weights: weights_file.write('{}\n'.format(weight))
+  weights_file.close()
+  print 'Weights written to {}'.format(weights_file.name)
 
 
 if __name__ == '__main__':
