@@ -66,7 +66,7 @@ class Maxent(Model):
         and we just reload the feature_funcs.
 
         """
-        self.model.save(filename, binary=False)
+        self.model.save(filename)
 
     def load(self, filename):
         """Loads a maxent model from disk."""
