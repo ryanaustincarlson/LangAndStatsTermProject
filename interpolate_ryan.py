@@ -141,8 +141,8 @@ def main(args):
 
 
 if __name__ == '__main__':
-  if len(args) != 2:
-      print 'usage: %s <prob-files>' % args[0]
+  if len(sys.argv) == 1:
+      print 'usage: %s <prob-files>' % sys.argv[0]
       print '       prob-files contain lists of probabilities generated from the same dev set (and end in .prob)'
       sys.exit(1)
 

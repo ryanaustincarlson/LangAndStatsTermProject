@@ -26,8 +26,15 @@ from Bigram import Bigram
 from Trigram import Trigram
 from write_model_predictions import get_output_filename
 
+try:
+  import cPickle as pickle
+except:
+  import pickle
+
 # turn logging on or off
 LOGGING_LEVEL = logging.DEBUG; #LOGGING_LEVEL = None
+OUTPUT_DIR = 'output/'
+WEIGHTS_FILENAME = OUTPUT_DIR + 'weights.pkl'
 
 class InterpolatedModel(Model):
     def __init__(self):
@@ -61,13 +68,12 @@ class InterpolatedModel(Model):
         add_model( Trigram, 'trigram' )
         # add_model( Maxent, 'maxent' )
 
-        output_dir = 'output/'
         dev_words = [line.strip() for line in open(dev_filename, 'r')]
 
         # write predictions out to disk using dev set
         model_outputs = []
         for model,model_name in zip(self.models, self.model_names):
-            model_outputs.append( get_output_filename(output_dir, dev_filename, model_name) )
+            model_outputs.append( get_output_filename(OUTPUT_DIR, dev_filename, model_name) )
             model.write_probability_list(dev_words, model_outputs[-1])
             logging.debug('Wrote dev set predictions using {} model'.format(model_name))
 
@@ -76,15 +82,45 @@ class InterpolatedModel(Model):
 
         print self.weights
 
-    def load(self, filename):
-        pass
+    def load(self):
+        filenames_to_class = {
+                'unigram-model.pkl':Unigram, 
+                'bigram-model.pkl':Bigram, 
+                'trigram-model.pkl':Trigram,
+                #'maxent-model.pkl':Maxent
+                }
 
-    def save(self, filename):
-        pass
+        self.models = []
+        for fname in sorted(filenames_to_class):
+            model = filenames_to_class[fname]()
+            model.load( OUTPUT_DIR + fname )
+
+            self.models.append(model)
+
+        model_name_to_weights = pickle.load(open(WEIGHTS_FILENAME, 'r'))
+
+        self.weights = []
+        possible_names = ['unigram','bigram','trigram','maxent']
+        for fname in sorted(filenames_to_class):
+            for name in possible_names:
+                if name in fname:
+                    self.weights.append( model_name_to_weights[name] )
+        
+    def save(self):
+        for model,model_name in zip(self.models, self.model_names):
+            model.save(OUTPUT_DIR + model_name + '-model.pkl')
+
+        model_name_to_weights = {}
+        for weight,model_name in zip(self.weights, self.model_names):
+            model_name_to_weights[model_name] = weight
+
+        pickle.dump(model_name_to_weights, open(WEIGHTS_FILENAME, 'r') )
 
     def get_probability(self, word, history):
         pass
 
 if __name__ == '__main__':
+    import sys
+
     model = InterpolatedModel()
-    model.train('data/allA.txt')
+    model.train(sys.argv[1])
