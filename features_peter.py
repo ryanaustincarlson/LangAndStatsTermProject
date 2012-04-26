@@ -25,7 +25,7 @@ def grammar_rule_to_function(name, constits):
         seq = list(history)
         seq.append(word)
         for c in constits:
-            if len(seq) + 1 < len(c):
+            if len(seq) < len(c):
                 continue
             else:
                 alignment = zip(reversed(seq), reversed(c))
