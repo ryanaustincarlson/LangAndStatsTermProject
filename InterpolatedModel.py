@@ -84,39 +84,26 @@ class InterpolatedModel(Model):
 
         print self.weights
 
-    def load(self, model_dir):
-        filenames_to_class = {
-                'unigram-model.pkl':Unigram, 
-                'bigram-model.pkl':Bigram, 
-                'trigram-model.pkl':Trigram,
-                #'maxent-model.pkl':Maxent
-                }
+    def load(self, directory_name):
+        self.weights = pickle.load(open(path.join(directory_name, 'weights.pkl')))
 
-        self.models = []
-        for fname in sorted(filenames_to_class):
-            model = filenames_to_class[fname]()
-            model.load( path.join(model_dir, fname) )
+        self.models = {}
 
-            self.models.append(model)
+        models['unigram'] = Unigram()
+        models['unigram'].load( path.join(directory_name, 'unigram.pkl') )
 
-        model_name_to_weights = pickle.load(open(WEIGHTS_FILENAME, 'r'))
+        models['bigram'] = Bigram()
+        models['bigram'].load( path.join(directory_name, 'bigram.pkl') )
 
-        self.weights = []
-        possible_names = ['unigram','bigram','trigram','maxent']
-        for fname in sorted(filenames_to_class):
-            for name in possible_names:
-                if name in fname:
-                    self.weights.append( model_name_to_weights[name] )
-        
-    def save(self):
-        for model,model_name in zip(self.models, self.model_names):
-            model.save(OUTPUT_DIR + model_name + '-model.pkl')
+        models['trigram'] = Trigram()
+        models['trigram'].load( path.join(directory_name, 'trigram.pkl') )
 
-        model_name_to_weights = {}
-        for weight,model_name in zip(self.weights, self.model_names):
-            model_name_to_weights[model_name] = weight
+    def save(self, directory_name):
+        with open(path.join(directory_name, 'weights.pkl'), 'w') as f:
+            pickle.dump(self.weights, f)        
 
-        pickle.dump(model_name_to_weights, open(WEIGHTS_FILENAME, 'w') )
+        for name, model in self.models:
+            model.save(path.join(directory_name, name+'.pkl'))
 
     def get_probability(self, word, history):
         pass
