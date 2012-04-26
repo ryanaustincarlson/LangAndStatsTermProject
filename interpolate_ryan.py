@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import random, math
+import random, math, sys
 
 def read_probs_file(fname):
   return [float(line.strip()) for line in open(fname, 'r')]
@@ -101,15 +101,8 @@ def run_algorithm_until_convergence(probability_models, initial_weights, converg
 def count_zeros(probabilities):
   print 'zero counts:', [sum((1 for prob in prob_model if prob == 0)) for prob_model in probabilities]
 
-def main():
-  import sys
-
-  if len(sys.argv) == 1:
-    print 'usage: %s <prob-files>' % sys.argv[0]
-    print '       prob-files contain lists of probabilities generated from the same dev set (and end in .prob)'
-    sys.exit(1)
-
-  fnames = sys.argv[1:]
+def interpolate(args):
+  fnames = args
 
   directory = ''
   if '/' in fnames[0]:
@@ -139,7 +132,19 @@ def main():
   weights_file.close()
   print 'Weights written to {}'.format(weights_file.name)
 
+  return weights
+
+def main(args):
+
+    weights = interpolate(args)
+
+
 
 if __name__ == '__main__':
-  main()
+  if len(args) != 2:
+      print 'usage: %s <prob-files>' % args[0]
+      print '       prob-files contain lists of probabilities generated from the same dev set (and end in .prob)'
+      sys.exit(1)
+
+  main(sys.argv[1:])
 

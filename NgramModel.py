@@ -1,5 +1,10 @@
 from Model import Model
 
+try:
+  import cPickle as pickle
+except:
+  import pickle
+
 class NgramModelException(Exception):
   def __init__(self, message):
     self.message = message
@@ -30,6 +35,12 @@ class NgramModel(Model):
       return self.model.prob(word, history)
     except Exception:
       raise NgramModelException("word (%s) not found in history (%s)" % (word, history))
+
+  def save(self, filename):
+    pickle.dump(self.model, open(filename, 'w'))
+
+  def load(self, filename):
+    self.model = pickle.load(open(filename, 'r'))
     
 def main():
   from pprint import pprint

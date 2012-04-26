@@ -11,16 +11,12 @@ def write_data(data, filename):
     f.write('{}\n'.format(d))
   f.close()
 
-def main():
-  if len(sys.argv) != 5:
-    print 'usage: %s all-data output-train output-dev dev-percent' % sys.argv[0]
-    print '       dev-percent: percent of all-data that should go into dev set (0,1)'
-    sys.exit(1)
+def main(args):
 
-  all_data = [line.strip() for line in open(sys.argv[1], 'r')]
-  output_train = sys.argv[2]
-  output_dev = sys.argv[3]
-  dev_percent = float(sys.argv[4])
+  all_data = [line.strip() for line in open(args[0], 'r')]
+  output_train = args[1]
+  output_dev = args[2]
+  dev_percent = float(args[3])
 
   if dev_percent <= 0 or dev_percent >= 1: raise Exception("dev-percent (%.4f) is not in range (0,1)" % dev_percent)
 
@@ -33,4 +29,10 @@ def main():
   write_data(dev_data, output_dev)
 
 
-if __name__ == '__main__': main()
+if __name__ == '__main__': 
+    if len(args) != 5:
+        print 'usage: %s all-data output-train output-dev dev-percent' % args[0]
+        print '       dev-percent: percent of all-data that should go into dev set (0,1)'
+        sys.exit(1)
+
+    main(sys.argv[1:])

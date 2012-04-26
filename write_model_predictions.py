@@ -22,17 +22,17 @@ def get_output_filename(output_dir, dev_filename, model_name):
 
   return output_dir + dev_filename + '-' + model_name + '.probs'
 
-def main():
+def main(args):
   logging.basicConfig(level=LOGGING_LEVEL, format="DEBUG: %(message)s")
 
-  if len(sys.argv) < 3 or len(sys.argv) > 4:
-    print 'usage: %s training-file dev-file [output-dir]' % sys.argv[0]
+  if len(args) < 3 or len(args) > 4:
+    print 'usage: %s training-file dev-file [output-dir]' % args[0]
     print '       output-dir is optional, default is "%s"' % OUTPUT_DIR_DEFAULT
     sys.exit(1)
 
-  training_filename = sys.argv[1]
-  dev_filename = sys.argv[2]
-  output_dir = sys.argv[3] if len(sys.argv) == 4 else OUTPUT_DIR_DEFAULT
+  training_filename = args[1]
+  dev_filename = args[2]
+  output_dir = args[3] if len(args) == 4 else OUTPUT_DIR_DEFAULT
 
   logging.debug('Training models...')
 
@@ -54,4 +54,4 @@ def main():
   trigram_model.write_probability_list(dev_words, get_output_filename(output_dir, dev_filename, 'trigram'))
   logging.debug('Wrote dev set predictions using trigram model')
 
-if __name__ == '__main__': main()
+if __name__ == '__main__': main(sys.argv)

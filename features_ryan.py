@@ -12,6 +12,8 @@ def contains():
     return contains_specific
   return [vocab(v) for v in VOCAB]
 
+## TODO: group tags into sensible groups
+## TODO: check only the last word or last two words
 def subsets():
   from itertools import combinations
   def vocab(vlist):
