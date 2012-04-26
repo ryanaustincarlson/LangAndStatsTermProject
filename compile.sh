@@ -2,7 +2,7 @@
 
 PYYAML_URL='http://pyyaml.org/download/pyyaml/PyYAML-3.09.tar.gz'
 NLTK_URL='http://nltk.googlecode.com/files/nltk-2.0.1rc1.tar.gz'
-MAXENT_URL='https://github.com/lzhang10/maxent.git'
+MAXENT_URL='git://github.com/lzhang10/maxent.git'
 
 BUILD_DIR=build
 PYYAML_DIR=$(basename $PYYAML_URL | perl -npe 's/\.tar\.gz//')
