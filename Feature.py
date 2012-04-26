@@ -1,38 +1,11 @@
 #!/usr/bin/env python
 
-class Feature:
-    """Define feature functions below"""
-    @staticmethod
-    def contains_NNP(word, history):
-        return 'NNP' in history
+import features_naoki
+import features_peter
+import features_ryan
 
-    @staticmethod
-    def contains_RB(word, history):
-        return 'RB' in history
+def load_features():
+    return features_naoki.get_feature_funcs('data/vocabulary.txt') + \
+           features_peter.get_feature_funcs('resources/valid_rules.txt') + \
+           features_ryan.ALL_FUNCTIONS
 
-    @staticmethod
-    def contains_JJ(word, history):
-        return 'JJ' in history
-
-    @staticmethod
-    def contains_DT(word, history):
-        return 'DT' in history
-
-    @staticmethod
-    def follows_JJ(word, history):
-        return history[-1] == 'JJ'
-
-
-if __name__ == '__main__':
-    methods = [getattr(Feature, method) for method in dir(Feature)
-               if callable(getattr(Feature, method))]
-
-    word = 'NNP'
-    history = ['FOO', 'DT', 'NNP', 'BAR', 'BAZ']
-
-    features = []
-    for func in methods:
-        val = func(word, history)
-        features.append((func.__name__, val))
-
-    print features

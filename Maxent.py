@@ -5,7 +5,7 @@ import maxent
 from maxent.cmaxent import MaxentModel
 
 from Model import Model
-from Feature import Feature
+import Feature
 
 class Maxent(Model):
     def __init__(self, history_length=30):
@@ -60,8 +60,7 @@ class Maxent(Model):
         return history
 
     def load_feature_functions(self):
-        return [getattr(Feature, method) for method in dir(Feature)
-                if callable(getattr(Feature, method))]
+        return Feature.load_features()
 
 
 def main():
