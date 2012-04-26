@@ -114,7 +114,7 @@ class InterpolatedModel(Model):
         for weight,model_name in zip(self.weights, self.model_names):
             model_name_to_weights[model_name] = weight
 
-        pickle.dump(model_name_to_weights, open(WEIGHTS_FILENAME, 'r') )
+        pickle.dump(model_name_to_weights, open(WEIGHTS_FILENAME, 'w') )
 
     def get_probability(self, word, history):
         pass
@@ -124,3 +124,6 @@ if __name__ == '__main__':
 
     model = InterpolatedModel()
     model.train(sys.argv[1])
+    model.save()
+
+    model.load()
