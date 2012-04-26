@@ -18,6 +18,7 @@ def subsets():
     def subsets_specific(word, history):
       #print 'vlist:',vlist,
       return reduce(lambda x,y: x or y, [v in history for v in vlist])
+    subsets_specific.__name__ = 'subsets_specific_{0}'.format(vlist)
     return subsets_specific
 
   min_choose = 1
