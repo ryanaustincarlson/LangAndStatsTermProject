@@ -3,6 +3,8 @@
 """
 import math
 
+from InterpolatedModel import InterpolatedModel
+
 VOCAB_FILE = 'data/vocabulary.txt'
 
 def next_tag_probs(model, history, vocabulary):
@@ -47,10 +49,11 @@ if __name__ == '__main__':
     import sys
     
     if not len(sys.argv) == 2:
-        print 'usage: python model_testing.py <path to model>'
+        print 'usage: python model_testing.py <model directory>'
         sys.exit(1)
 
-    m = load_model(sys.argv[1])
+    m = InterpolatedModel()
+    InterpolatedModel.load(sys.argv[1])
     vocabulary = [l.strip() for l in open(VOCAB_FILE)]
 
     history = []
