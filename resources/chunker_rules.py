@@ -8,7 +8,7 @@ PP-DIR:
 {<TO><NP>}
 PP-LOC:
 {<IN><NP>}
-{<PP><<COMMA>><CC><PP>}
+{<PP><COMMA><CC><PP>}
 PP-CLR:
 {<TO><NP-1>}
 {<TO><NP>}
@@ -27,7 +27,7 @@ NP-SBJ-1:
 PP-TMP:
 {<IN><NP>}
 NP-SBJ-2:
-{<NP><<COMMA>><VP><<COMMA>>}
+{<NP><COMMA><VP><COMMA>}
 SBAR+S:
 {<NP-SBJ><VP>}
 NP-LGS:
@@ -35,12 +35,12 @@ NP-LGS:
 ADVP-MNR:
 {<RB>}
 S:
-{<NP-SBJ-1><VP><<PERIOD>>}
+{<NP-SBJ-1><VP><PERIOD>}
 {<NP-SBJ><NP-TMP><VP>}
 {<NP-SBJ><VP>}
-{<NP-SBJ><VP><<PERIOD>>}
-{<PP-LOC><<COMMA>><NP-SBJ-2><VP><<PERIOD>>}
-{<S-TPC-1><<COMMA>><NP-SBJ><VP><<PERIOD>>}
+{<NP-SBJ><VP><PERIOD>}
+{<PP-LOC><COMMA><NP-SBJ-2><VP><PERIOD>}
+{<S-TPC-1><COMMA><NP-SBJ><VP><PERIOD>}
 VP:
 {<ADVP-MNR><VBN><PP-CLR>}
 {<MD><VP>}
@@ -71,7 +71,7 @@ NP-TMP:
 {<NNP><CD>}
 {<NN><CC><NNS>}
 UCP:
-{<JJ><<COMMA>><NN><CC><NN>}
+{<JJ><COMMA><NN><CC><NN>}
 ADJP-PRD:
 {<JJ>}
 {<JJ><NP-TMP>}
@@ -117,8 +117,8 @@ NP-SBJ:
 {<NNP><NNP><NNPS><NNP>}
 {<NNP><NNP><NNP>}
 {<NNS>}
-{<NP><<COMMA>><NP><<COMMA>>}
-{<NP><<COMMA>><VP><<COMMA>>}
+{<NP><COMMA><NP><COMMA>}
+{<NP><COMMA><VP><COMMA>}
 {<NP><CC><NP>}
 {<PRP$><NNP><NNS>}
 {<PRP>}
