@@ -21,12 +21,13 @@ weights on the dev set. Some thoughts on the methods:
 
 import os.path as path
 
-import interpolate, sample, logging
+import interpolate, sample, logging, tempfile
 from Model import Model
 from Unigram import Unigram
 from Bigram import Bigram
 from Trigram import Trigram
 from write_model_predictions import get_output_filename
+from pprint import pprint
 
 try:
   import cPickle as pickle
@@ -35,12 +36,15 @@ except:
 
 # turn logging on or off
 LOGGING_LEVEL = logging.DEBUG; #LOGGING_LEVEL = None
-OUTPUT_DIR = 'output/'
-WEIGHTS_FILENAME = OUTPUT_DIR + 'weights.pkl'
 
 class InterpolatedModel(Model):
     def __init__(self):
-        pass
+        self.model_names = [
+                'unigram',
+                'bigram',
+                'trigram',
+                #'maxent',
+                ]
 
     def train(self, filename):
         logging.basicConfig(level=LOGGING_LEVEL, format="DEBUG: %(message)s")
@@ -57,13 +61,13 @@ class InterpolatedModel(Model):
         logging.debug('Split {} into training ({}) and development ({})'.format(all_filename, train_filename, dev_filename))
         
         # train models on training set
-        self.models = []
-        self.model_names = []
+        self.models = {}
 
         def add_model(ModelClass, name):
-            self.models.append( ModelClass(train_filename) )
-            self.model_names.append( name )
-            logging.debug('Done training {} model'.format(self.model_names[-1]))
+            self.models[name] = ModelClass()
+            self.models[name].train(train_filename)
+
+            logging.debug('Done training {} model'.format(name))
 
         add_model( Unigram, 'unigram' )
         add_model( Bigram, 'bigram' )
@@ -74,35 +78,40 @@ class InterpolatedModel(Model):
 
         # write predictions out to disk using dev set
         model_outputs = []
-        for model,model_name in zip(self.models, self.model_names):
-            model_outputs.append( get_output_filename(OUTPUT_DIR, dev_filename, model_name) )
+        output_dir = tempfile.mkdtemp()
+        for model_name in self.model_names:
+            model = self.models[model_name]
+
+            model_outputs.append( path.join( output_dir, model_name + '.probs' ) )
             model.write_probability_list(dev_words, model_outputs[-1])
             logging.debug('Wrote dev set predictions using {} model'.format(model_name))
 
         # interpolate the models, get the weights
-        self.weights = interpolate.interpolate(model_outputs)
+        weights_list = interpolate.interpolate(model_outputs)
 
-        print self.weights
+        self.weights = dict( zip( self.model_names, weights_list ) )
 
     def load(self, directory_name):
         self.weights = pickle.load(open(path.join(directory_name, 'weights.pkl')))
 
         self.models = {}
+        
+        # TODO: add load_model()
 
-        models['unigram'] = Unigram()
-        models['unigram'].load( path.join(directory_name, 'unigram.pkl') )
+        self.models['unigram'] = Unigram()
+        self.models['unigram'].load( path.join(directory_name, 'unigram.pkl') )
 
-        models['bigram'] = Bigram()
-        models['bigram'].load( path.join(directory_name, 'bigram.pkl') )
+        self.models['bigram'] = Bigram()
+        self.models['bigram'].load( path.join(directory_name, 'bigram.pkl') )
 
-        models['trigram'] = Trigram()
-        models['trigram'].load( path.join(directory_name, 'trigram.pkl') )
+        self.models['trigram'] = Trigram()
+        self.models['trigram'].load( path.join(directory_name, 'trigram.pkl') )
 
     def save(self, directory_name):
         with open(path.join(directory_name, 'weights.pkl'), 'w') as f:
             pickle.dump(self.weights, f)        
 
-        for name, model in self.models:
+        for name, model in self.models.items():
             model.save(path.join(directory_name, name+'.pkl'))
 
     def get_probability(self, word, history):
@@ -111,8 +120,10 @@ class InterpolatedModel(Model):
 if __name__ == '__main__':
     import sys
 
+    # TODO: if stmt here!
+
     model = InterpolatedModel()
     model.train(sys.argv[1])
-    model.save()
+    model.save(sys.argv[2])
 
-    model.load()
+    model.load(sys.argv[2])
