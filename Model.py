@@ -10,6 +10,12 @@ class Model:
   def train(filename):
     assert True is False
 
+  def save(filename):
+    assert True is False
+
+  def load(filename):
+    assert True is False
+
   def probability_list(self, words):
     def probability_or_zero(word, history):
       """ if probability exists, return it; otherwise, assign zero probability """
