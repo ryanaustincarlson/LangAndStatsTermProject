@@ -19,6 +19,8 @@ weights on the dev set. Some thoughts on the methods:
 
 """
 
+import os.path as path
+
 import interpolate, sample, logging
 from Model import Model
 from Unigram import Unigram
@@ -82,7 +84,7 @@ class InterpolatedModel(Model):
 
         print self.weights
 
-    def load(self):
+    def load(self, model_dir):
         filenames_to_class = {
                 'unigram-model.pkl':Unigram, 
                 'bigram-model.pkl':Bigram, 
@@ -93,7 +95,7 @@ class InterpolatedModel(Model):
         self.models = []
         for fname in sorted(filenames_to_class):
             model = filenames_to_class[fname]()
-            model.load( OUTPUT_DIR + fname )
+            model.load( path.join(model_dir, fname) )
 
             self.models.append(model)
 
