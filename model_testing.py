@@ -42,18 +42,19 @@ def predict(model, history, vocabulary):
     """
     tag_probs = next_tag_probs(model, history, vocabulary)
     prediction = max(tag_probs)[1]
-    tag_probs = dict(v, p for p, v in tag_probs)
+    tag_probs = dict( [(v,p) for p,v in tag_probs ])
     return prediction, tag_probs
 
 if __name__ == '__main__':
-    import sys
+    import sys, logging
+    logging.basicConfig(level=logging.DEBUG, format="DEBUG: %(message)s")
     
-    if not len(sys.argv) == 2:
+    if len(sys.argv) != 2:
         print 'usage: python model_testing.py <model directory>'
         sys.exit(1)
 
     m = InterpolatedModel()
-    InterpolatedModel.load(sys.argv[1])
+    m.load(sys.argv[1])
     vocabulary = [l.strip() for l in open(VOCAB_FILE)]
 
     history = []
@@ -62,7 +63,7 @@ if __name__ == '__main__':
 
     for line in sys.stdin:
         prediction, tag_probs = predict(m, history, vocabulary)
-        print ' '.join(tag_probs[v] for v in vocabulary)
+        print ' '.join(str(tag_probs[v]) for v in vocabulary)
         sys.stdout.flush()
         token = line.strip()
 

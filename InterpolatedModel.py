@@ -22,13 +22,16 @@ weights on the dev set. Some thoughts on the methods:
 import os.path as path
 
 import interpolate, sample, logging, tempfile
+from pprint import pprint
+from write_model_predictions import get_output_filename
+
 from Model import Model
 from Unigram import Unigram
 from Bigram import Bigram
 from Trigram import Trigram
+from FourGram import FourGram
+from FiveGram import FiveGram
 from Maxent import Maxent
-from write_model_predictions import get_output_filename
-from pprint import pprint
 
 try:
   import cPickle as pickle
@@ -42,8 +45,10 @@ class InterpolatedModel(Model):
     def __init__(self):
         self.model_names = [
                 'unigram',
-                #'bigram',
-                #'trigram',
+                'bigram',
+                'trigram',
+                'fourgram',
+                'fivegram',
                 'maxent',
                 ]
 
@@ -71,8 +76,10 @@ class InterpolatedModel(Model):
             logging.debug('Done training {} model'.format(name))
 
         add_model( Unigram, 'unigram' )
-        #add_model( Bigram, 'bigram' )
-        #add_model( Trigram, 'trigram' )
+        add_model( Bigram, 'bigram' )
+        add_model( Trigram, 'trigram' )
+        add_model( FourGram, 'fourgram' )
+        add_model( FiveGram, 'fivegram' )
         add_model( Maxent, 'maxent' )
 
         dev_words = [line.strip() for line in open(dev_filename, 'r')]
@@ -101,21 +108,30 @@ class InterpolatedModel(Model):
         def load_model(name, ModelClass):
             self.models[name] = ModelClass()
             self.models[name].load( path.join(directory_name, name + '.pkl') )
+            logging.debug("Loaded {} model from disk".format(name))
 
         load_model('unigram', Unigram)
-        #load_model('bigram', Bigram)
-        #load_model('trigram', Trigram)
+        load_model('bigram', Bigram)
+        load_model('trigram', Trigram)
+        load_model('fourgram', FourGram)
+        load_model('fivegram', FiveGram)
         load_model('maxent', Maxent)
 
     def save(self, directory_name):
         with open(path.join(directory_name, 'weights.pkl'), 'w') as f:
             pickle.dump(self.weights, f)        
+            logging.debug("Saved weights to disk")
 
         for name, model in self.models.items():
             model.save(path.join(directory_name, name+'.pkl'))
+            logging.debug("Saved {} model to disk".format(name))
 
     def get_probability(self, word, history):
-        pass
+        prediction = 0
+        for model_name, model in self.models.items():
+            prediction += model.get_probability(word, history) * self.weights[model_name]
+        return prediction
+
 
 if __name__ == '__main__':
     import sys
