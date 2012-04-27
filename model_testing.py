@@ -71,7 +71,7 @@ if __name__ == '__main__':
         history.append(token)
         token_probs.append(tag_probs[token])
 
-    print '{0} {1}'.format(float(missed_prediction) / len(history),
+    print '{0} {1}'.format(float(missed_predictions) / len(history),
                            perplexity(token_probs))
     sys.stdout.flush()
-        
+
