@@ -19,7 +19,6 @@ def distance_from_last_tag_func(tag):
     feature_func.__name__ = 'feature_distance_from_last_{0}'.format(tag)
     return feature_func
 
-
 def trigger_pairs_func(tag_a, tag_b):
     def feature_func(word, history):
         if word == tag_b and tag_a in history[:-3]:

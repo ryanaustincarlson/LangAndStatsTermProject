@@ -59,19 +59,24 @@ if __name__ == '__main__':
 
     history = []
     token_probs = []
-    missed_predictions = 0
+    correct_predictions = 0
+
+    prediction, tag_probs = predict(m, history, vocabulary)
+    print ' '.join(str(tag_probs[v]) for v in vocabulary)
+    sys.stdout.flush()
 
     for line in sys.stdin:
-        prediction, tag_probs = predict(m, history, vocabulary)
-        print ' '.join(str(tag_probs[v]) for v in vocabulary)
-        sys.stdout.flush()
         token = line.strip()
 
-        if not token == prediction: missed_predictions += 1
+        if token == prediction: correct_predictions += 1
         history.append(token)
         token_probs.append(tag_probs[token])
 
-    print '{0} {1}'.format(float(missed_predictions) / len(history),
+        prediction, tag_probs = predict(m, history, vocabulary)
+        print ' '.join(str(tag_probs[v]) for v in vocabulary)
+        sys.stdout.flush()
+
+    print '{0} {1}'.format(float(correct_predictions) / len(history),
                            perplexity(token_probs))
     sys.stdout.flush()
 
