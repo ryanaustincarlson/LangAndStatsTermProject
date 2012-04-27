@@ -72,7 +72,7 @@ if __name__ == '__main__':
         history.append(token)
         token_probs.append(tag_probs[token])
 
-        prediction, tag_probs = predict(m, history, vocabulary)
+        prediction, tag_probs = predict(m, history[-30:], vocabulary) # temporary fix
         print ' '.join(str(tag_probs[v]) for v in vocabulary)
         sys.stdout.flush()
 
