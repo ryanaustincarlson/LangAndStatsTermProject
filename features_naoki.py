@@ -49,9 +49,13 @@ def get_feature_funcs(vocab_fname):
     return feature_funcs
 
 if __name__ == '__main__':
-    test_corpus = [('JJ', ['FOO', 'JJ', 'BAR', 'JJ']),
+    test_corpus = [
+            ('JJ', ['FOO', 'JJ', 'BAR', 'JJ']),
             ('NNP', ['RB', 'NNP', 'NNP', 'NNPS']),
-            ('NN', ['CC', 'FOO', 'BAR', 'DT'])]
+            ('NN', ['CC', 'FOO', 'BAR', 'DT']),
+            ('<RIGHTPAR>', ['<LEFTPAR>', 'CC', 'NNP', 'PRP']),
+            ('CD', ['CD', 'CC', 'CC', 'NNP', 'PRP']),
+            ]
     feature_funcs = get_feature_funcs('data/vocabulary.txt')
 
     for word, history in test_corpus:
