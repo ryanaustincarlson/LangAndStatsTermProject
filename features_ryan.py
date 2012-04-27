@@ -1,48 +1,61 @@
 
-VOCAB = [line.strip() for line in open('data/vocabulary.txt', 'r')]
 
 from pprint import pprint
 
-# this is actually just a degenerate case of the subsets function below
-def contains():
-  def vocab(v):
-    def contains_specific(word, history):
-      #print v,
-      return v in history
-    return contains_specific
-  return [vocab(v) for v in VOCAB]
-
-## TODO: group tags into sensible groups
-## TODO: check only the last word or last two words
 def subsets():
-  from itertools import combinations
-  def vocab(vlist):
+
+  all_groups = []
+  all_groups.append( ['JJ','JJR','JJS'] ) # adjectives
+  all_groups.append( ['NN','NNS','NNP','NNPS'] ) # nouns
+  all_groups.append( ['PRP','PRP$'] ) # pronouns
+  all_groups.append( ['RB','RBR'] ) # adverbs
+  all_groups.append( ['VB','VBD','VBG','VBN','VBP','VBZ'] ) # verbs
+  all_groups.append( ['WDT','WP','WRB'] ) # wh_words
+  all_groups.append( ['<COLON>','<COMMA>','<LEFTPAR>','<PERIOD>','<RIGHTPAR>'] ) # punctuation
+  all_groups.append( ['CC'] ) # coordinating conjunction
+  all_groups.append( ['CD'] ) # cardinal number
+  all_groups.append( ['DT'] ) # determiner
+  all_groups.append( ['EX'] ) # existential THERE
+  all_groups.append( ['IN'] ) # preposition or subordinating conjunction
+  all_groups.append( ['MD'] ) # modal
+  all_groups.append( ['POS'] ) # possessive ending
+  all_groups.append( ['RP'] ) # particle
+  all_groups.append( ['TO'] ) # TO
+
+  def vocab(group, lookback):
     def subsets_specific(word, history):
-      #print 'vlist:',vlist,
-      return reduce(lambda x,y: x or y, [v in history for v in vlist])
-    subsets_specific.__name__ = 'subsets_specific_{0}'.format(vlist)
+
+      # check the last *lookback* entries in the history and check if one of the tags
+      # in the given group is there
+      return reduce(lambda x,y: x or y, [tag in history[-lookback:] for tag in group])
+
+    subsets_specific.__name__ = 'subsets_specific_{0}'.format(group)
     return subsets_specific
 
-  min_choose = 1
-  max_choose = 3
+  min_lookback = 1
+  max_lookback = 3
 
   functions = []
-  for choose in range(min_choose, max_choose+1):
-    functions += [vocab(v) for v in combinations(VOCAB, choose)]
+  for lookback in range(min_lookback, max_lookback+1):
+    for group in all_groups:
+      functions.append( vocab(group, lookback) )
+
   return functions
 
-ALL_FUNCTIONS = subsets()
+def get_feature_funcs():
+  return subsets()
 
 def main():
 
   word = 'NNP'
-  history = ['NNP','<COMMA>']
+  history = ['NNP', 'CD','<COMMA>']
 
   #functions = contains()
   functions = subsets()
   #functions = contains() + subsets()
   for fcn in functions:
-    print fcn( word, history )
+    print fcn( word, history ),'\t',
+    print fcn.__name__
     #if fcn( word, history ):
     #  print 'hey!'
     #else:

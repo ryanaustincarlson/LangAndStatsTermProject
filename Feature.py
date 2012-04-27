@@ -7,5 +7,5 @@ import features_ryan
 def load_features():
     return features_naoki.get_feature_funcs('data/vocabulary.txt') + \
            features_peter.get_feature_funcs('resources/valid_rules.txt') + \
-           features_ryan.ALL_FUNCTIONS
+           features_ryan.get_feature_funcs()
 

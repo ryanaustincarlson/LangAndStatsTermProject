@@ -29,12 +29,12 @@ class NgramModel(Model):
       history = history[-(self.n-1):] # otherwise, grab the last (n-1) entries
 
     if len(history) < self.n-1:
-      raise NgramModelException("history (%s) is too short" % history)
+      return 0
 
     try:
       return self.model.prob(word, history)
     except Exception:
-      raise NgramModelException("word (%s) not found in history (%s)" % (word, history))
+      return 0
 
   def save(self, filename):
     pickle.dump(self.model, open(filename, 'w'))

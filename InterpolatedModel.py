@@ -26,6 +26,7 @@ from Model import Model
 from Unigram import Unigram
 from Bigram import Bigram
 from Trigram import Trigram
+from Maxent import Maxent
 from write_model_predictions import get_output_filename
 from pprint import pprint
 
@@ -41,9 +42,9 @@ class InterpolatedModel(Model):
     def __init__(self):
         self.model_names = [
                 'unigram',
-                'bigram',
-                'trigram',
-                #'maxent',
+                #'bigram',
+                #'trigram',
+                'maxent',
                 ]
 
     def train(self, filename):
@@ -70,15 +71,16 @@ class InterpolatedModel(Model):
             logging.debug('Done training {} model'.format(name))
 
         add_model( Unigram, 'unigram' )
-        add_model( Bigram, 'bigram' )
-        add_model( Trigram, 'trigram' )
-        # add_model( Maxent, 'maxent' )
+        #add_model( Bigram, 'bigram' )
+        #add_model( Trigram, 'trigram' )
+        add_model( Maxent, 'maxent' )
 
         dev_words = [line.strip() for line in open(dev_filename, 'r')]
 
         # write predictions out to disk using dev set
         model_outputs = []
         output_dir = tempfile.mkdtemp()
+        logging.debug('Temporary Output Directory: {}'.format(output_dir))
         for model_name in self.model_names:
             model = self.models[model_name]
 
@@ -95,17 +97,15 @@ class InterpolatedModel(Model):
         self.weights = pickle.load(open(path.join(directory_name, 'weights.pkl')))
 
         self.models = {}
-        
-        # TODO: add load_model()
 
-        self.models['unigram'] = Unigram()
-        self.models['unigram'].load( path.join(directory_name, 'unigram.pkl') )
+        def load_model(name, ModelClass):
+            self.models[name] = ModelClass()
+            self.models[name].load( path.join(directory_name, name + '.pkl') )
 
-        self.models['bigram'] = Bigram()
-        self.models['bigram'].load( path.join(directory_name, 'bigram.pkl') )
-
-        self.models['trigram'] = Trigram()
-        self.models['trigram'].load( path.join(directory_name, 'trigram.pkl') )
+        load_model('unigram', Unigram)
+        #load_model('bigram', Bigram)
+        #load_model('trigram', Trigram)
+        load_model('maxent', Maxent)
 
     def save(self, directory_name):
         with open(path.join(directory_name, 'weights.pkl'), 'w') as f:
@@ -120,7 +120,9 @@ class InterpolatedModel(Model):
 if __name__ == '__main__':
     import sys
 
-    # TODO: if stmt here!
+    if len(sys.argv) != 3:
+        print 'usage: {} all-data output_dir'.format(sys.argv[0])
+        sys.exit(1)
 
     model = InterpolatedModel()
     model.train(sys.argv[1])
