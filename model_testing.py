@@ -57,7 +57,8 @@ if __name__ == '__main__':
     print ' '.join('{0:.3e}'.format(tag_probs[v]) for v in vocabulary)
     sys.stdout.flush()
 
-    for line in sys.stdin:
+    line = sys.stdin.readline()
+    while line:
         token = line.strip()
 
         if token == prediction: correct_predictions += 1
@@ -67,6 +68,7 @@ if __name__ == '__main__':
         prediction, tag_probs = predict(m, history[-30:], vocabulary) # temporary fix
         print ' '.join('{0:.3e}'.format(tag_probs[v]) for v in vocabulary)
         sys.stdout.flush()
+        line = sys.stdin.readline()
 
     print '{0} {1}'.format(float(correct_predictions) / len(history),
                            perplexity(token_probs))
