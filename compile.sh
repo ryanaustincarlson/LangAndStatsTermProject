@@ -29,5 +29,5 @@ cd $SRILM_DIR
 tar xzf $SRILM_TARBALL
 MT=`./sbin/machine-type`
 SRILM=`pwd -P`
-make MACHINE_TYPE=$MT SRILM=$SRILM TCL_INCLUDE=/usr/include/tcl.h TCL_LIBRARY=/usr/lib64/libtcl.so
+make MACHINE_TYPE=$MT SRILM=$SRILM TCL_INCLUDE=/usr/include/ TCL_LIBRARY=/usr/lib64/libtcl.so
 )
