@@ -19,6 +19,7 @@ weights on the dev set. Some thoughts on the methods:
 
 """
 
+import os
 import os.path as path
 
 import interpolate, sample, logging, tempfile
@@ -56,9 +57,9 @@ class InterpolatedModel(Model):
         logging.basicConfig(level=LOGGING_LEVEL, format="DEBUG: %(message)s")
 
         all_filename = filename
-        directory = all_filename[:all_filename.rfind('/')+1]
-        train_filename = directory + 'train.txt'
-        dev_filename = directory + 'dev.txt'
+        directory = path.dirname(filename)
+        train_filename = path.join(directory, 'train.txt')
+        dev_filename = path.join(directory, 'dev.txt')
 
         dev_percent = 0.1
 
@@ -119,6 +120,8 @@ class InterpolatedModel(Model):
         load_model('maxent', Maxent)
 
     def save(self, directory_name):
+        if not path.isdir(directory_name): os.makedirs(directory_name)
+
         with open(path.join(directory_name, 'weights.pkl'), 'w') as f:
             pickle.dump(self.weights, f)        
             logging.debug("Saved weights to disk")
@@ -145,4 +148,4 @@ if __name__ == '__main__':
     model.train(sys.argv[1])
     model.save(sys.argv[2])
 
-    model.load(sys.argv[2])
+    #model.load(sys.argv[2])

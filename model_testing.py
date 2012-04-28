@@ -25,14 +25,6 @@ def perplexity(token_probs):
     avg_ll = sum(log_probs) / float(len(log_probs))
     return 2 ** (-avg_ll)
 
-def load_model(model_path):
-    """Load our big interpolated model from disk. I'm guessing
-    we should have an InterpolatedModel class and just assume
-    that this is the only model we'll ever want to load.
-
-    """
-    pass
-
 def predict(model, history, vocabulary):
     """Pass the model, history, and vocabulary to this function.
     Returns a 2-tuple in which the most likely token is the first
@@ -59,19 +51,24 @@ if __name__ == '__main__':
 
     history = []
     token_probs = []
-    missed_predictions = 0
+    correct_predictions = 0
+
+    prediction, tag_probs = predict(m, history, vocabulary)
+    print ' '.join('{0:.3e}'.format(tag_probs[v]) for v in vocabulary)
+    sys.stdout.flush()
 
     for line in sys.stdin:
-        prediction, tag_probs = predict(m, history, vocabulary)
-        print ' '.join(str(tag_probs[v]) for v in vocabulary)
-        sys.stdout.flush()
         token = line.strip()
 
-        if not token == prediction: missed_predictions += 1
+        if token == prediction: correct_predictions += 1
         history.append(token)
         token_probs.append(tag_probs[token])
 
-    print '{0} {1}'.format(float(missed_prediction) / len(history),
+        prediction, tag_probs = predict(m, history[-30:], vocabulary) # temporary fix
+        print ' '.join('{0:.3e}'.format(tag_probs[v]) for v in vocabulary)
+        sys.stdout.flush()
+
+    print '{0} {1}'.format(float(correct_predictions) / len(history),
                            perplexity(token_probs))
     sys.stdout.flush()
-        
+
