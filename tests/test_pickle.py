@@ -29,7 +29,7 @@ class TestPickle(unittest.TestCase):
     model = Unigram()
     model.train('./data/trainA.txt')
 
-    fname = 'output/test_unigram.pkl'
+    fname = '/tmp/test_unigram.pkl'
     model.save(fname)
 
     loaded_model = Unigram()

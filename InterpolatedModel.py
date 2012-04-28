@@ -98,6 +98,7 @@ class InterpolatedModel(Model):
 
         # interpolate the models, get the weights
         weights_list = interpolate.interpolate(model_outputs)
+        logging.debug('Weights: {}'.format(weights_list))
 
         self.weights = dict( zip( self.model_names, weights_list ) )
 
