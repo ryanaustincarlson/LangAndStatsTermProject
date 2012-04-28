@@ -20,22 +20,27 @@ class NgramModel(Model):
         if filename: self.train(filename)
 
     def train(self, filename):
+        def get_ngrams(n, words):
+            for i in xrange(len(words) - n):
+                yield words[i:i+n]
+
         words = [line.strip() for line in open(filename, 'r')]
-        int_def_dict = functools.partial(defaultdict, int)
-        self.ngrams = defaultdict(int_def_dict)
-        for i in xrange(len(words) - self.n):
-            seq = words[i:i+self.n]
-            context = tuple(words[:-1])
-            word = words[-1]
+        ddict_int = functools.partial(defaultdict, int)
+        self.ngrams = defaultdict(ddict_int)
+
+        for gram in get_ngrams(self.n, words):
+            context = tuple(gram[:-1]) if self.n > 1 else ()
+            word = seq[-1]
             self.ngrams[context][word] += 1
+
         for context, counts in self.ngrams.items():
             total = float(sum(counts.values()))
             for k in counts:
                 counts[k] /= total
   
     def get_probability(self, word, history):
-        seq = tuple(history[-(self.n-1):] + [word])
-        return float(self.ngrams[seq])
+        context = tuple(history[-(self.n - 1):]) if self.n > 1 else ()
+        return float(self.ngrams[context][word])
   
     def save(self, filename):
         pickle.dump(self.ngrams, open(filename, 'w'))
