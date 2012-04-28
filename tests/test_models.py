@@ -14,7 +14,7 @@ class TestModels(unittest.TestCase):
 
     def test_probability_sums_to_one(self):
         models  = [Unigram, Bigram, Trigram, FourGram, FiveGram]
-        history = ['NNP', 'RB', 'JJ']
+        history = ['NNP', 'RB', 'VBZ', 'DT', 'JJ', 'NN']
 
         for model in models:
             m = model()
