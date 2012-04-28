@@ -78,18 +78,19 @@ class InterpolatedModel(Model):
 
             logging.debug('Done training {} model'.format(name))
 
-        add_model( Unigram, 'unigram' )
-        add_model( Bigram, 'bigram' )
-        add_model( Trigram, 'trigram' )
+        add_model( Unigram,  'unigram' )
+        add_model( Bigram,   'bigram' )
+        add_model( Trigram,  'trigram' )
         add_model( Fourgram, 'fourgram' )
         add_model( Fivegram, 'fivegram' )
-        add_model( Sixgram, 'sixgram' )
-        add_model( Maxent, 'maxent' )
+        add_model( Sixgram,  'sixgram' )
+        add_model( Maxent,   'maxent' )
 
-        self.models[bigram].backoff_model = self.models[unigram]
-        self.models[trigram].backoff_model = self.models[bigram]
-        self.models[fourgram].backoff_model = self.models[trigram]
-        self.models[fivegram].backoff_model = self.models[fourgram]
+        self.models['bigram'].backoff_model   = self.models['unigram']
+        self.models['trigram'].backoff_model  = self.models['bigram']
+        self.models['fourgram'].backoff_model = self.models['trigram']
+        self.models['fivegram'].backoff_model = self.models['fourgram']
+        self.models['sixgram'].backoff_model  = self.models['fivegram']
 
         dev_words = [line.strip() for line in open(dev_filename, 'r')]
 
@@ -120,18 +121,19 @@ class InterpolatedModel(Model):
             self.models[name].load( path.join(directory_name, name + '.pkl') )
             logging.debug("Loaded {} model from disk".format(name))
 
-        load_model('unigram', Unigram)
-        load_model('bigram', Bigram)
-        load_model('trigram', Trigram)
+        load_model('unigram',  Unigram)
+        load_model('bigram',   Bigram)
+        load_model('trigram',  Trigram)
         load_model('fourgram', Fourgram)
         load_model('fivegram', Fivegram)
-        load_model('sixgram', Sixgram)
-        load_model('maxent', Maxent)
+        load_model('sixgram',  Sixgram)
+        load_model('maxent',   Maxent)
 
-        self.models[bigram].backoff_model = self.models[unigram]
-        self.models[trigram].backoff_model = self.models[bigram]
-        self.models[fourgram].backoff_model = self.models[trigram]
-        self.models[fivegram].backoff_model = self.models[fourgram]
+        self.models['bigram'].backoff_model   = self.models['unigram']
+        self.models['trigram'].backoff_model  = self.models['bigram']
+        self.models['fourgram'].backoff_model = self.models['trigram']
+        self.models['fivegram'].backoff_model = self.models['fourgram']
+        self.models['sixgram'].backoff_model  = self.models['fivegram']
 
     def save(self, directory_name):
         if not path.isdir(directory_name): os.makedirs(directory_name)
