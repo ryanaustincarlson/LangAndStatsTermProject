@@ -14,9 +14,10 @@ class NgramModelException(Exception):
         return repr(self.message)
 
 class NgramModel(Model):
-    def __init__(self, n, filename=None):
+    def __init__(self, n, backoff_model=None, filename=None):
         ''' optional filename parameter since we often want to train on initialization '''
         self.n = n
+        self.backoff_model = backoff_model
         if filename: self.train(filename)
 
     def train(self, filename):
@@ -40,13 +41,17 @@ class NgramModel(Model):
   
     def get_probability(self, word, history):
         context = tuple(history[-(self.n - 1):]) if self.n > 1 else ()
-        return float(self.ngrams[context][word])
+        if not self.ngrams[context][word] and self.backoff_model:
+            return float(self.backoff_model.get_probability(word, history))
+        else:
+            return float(self.ngrams[context][word])
   
     def save(self, filename):
         pickle.dump(self.ngrams, open(filename, 'w'))
   
-    def load(self, filename):
+    def load(self, filename, backoff_model=None):
         self.ngrams = pickle.load(open(filename, 'r'))
+        self.backoff_model = backoff_model
     
 def main():
     from pprint import pprint

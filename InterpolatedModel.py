@@ -83,6 +83,11 @@ class InterpolatedModel(Model):
         add_model( FiveGram, 'fivegram' )
         add_model( Maxent, 'maxent' )
 
+        self.models[bigram].backoff_model = self.models[unigram]
+        self.models[trigram].backoff_model = self.models[bigram]
+        self.models[fourgram].backoff_model = self.models[trigram]
+        self.models[fivegram].backoff_model = self.models[fourgram]
+
         dev_words = [line.strip() for line in open(dev_filename, 'r')]
 
         # write predictions out to disk using dev set
@@ -118,6 +123,11 @@ class InterpolatedModel(Model):
         load_model('fourgram', FourGram)
         load_model('fivegram', FiveGram)
         load_model('maxent', Maxent)
+
+        self.models[bigram].backoff_model = self.models[unigram]
+        self.models[trigram].backoff_model = self.models[bigram]
+        self.models[fourgram].backoff_model = self.models[trigram]
+        self.models[fivegram].backoff_model = self.models[fourgram]
 
     def save(self, directory_name):
         if not path.isdir(directory_name): os.makedirs(directory_name)
