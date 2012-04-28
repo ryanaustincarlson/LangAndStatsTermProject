@@ -30,7 +30,7 @@ class NgramModel(Model):
 
         for gram in get_ngrams(self.n, words):
             context = tuple(gram[:-1]) if self.n > 1 else ()
-            word = seq[-1]
+            word = gram[-1]
             self.ngrams[context][word] += 1
 
         for context, counts in self.ngrams.items():

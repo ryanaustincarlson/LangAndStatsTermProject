@@ -6,8 +6,12 @@ try:
 except:
      import pickle
 
-from Trigram import Trigram
-from Unigram import Unigram
+from Unigram  import Unigram
+from Bigram   import Bigram
+from Trigram  import Trigram
+from FourGram import FourGram
+from FiveGram import FiveGram
+from Maxent   import Maxent
 
 class TestPickle(unittest.TestCase):
   def setUp(self):
@@ -26,20 +30,23 @@ class TestPickle(unittest.TestCase):
 
 
   def test_model_pickle(self):
-    model = Unigram()
-    model.train('./data/trainA.txt')
+    models  = [Unigram, Bigram, Trigram, FourGram, FiveGram]
 
-    fname = '/tmp/test_unigram.pkl'
-    model.save(fname)
+    for model in models:
+      m = model()
+      m.train('./data/trainA.txt')
 
-    loaded_model = Unigram()
-    loaded_model.load(fname)
+      fname = '/tmp/test_%s.pkl' % (model)
+      m.save(fname)
 
-    word = 'CC'
-    history = ['NNP', 'RB', 'JJ']
+      loaded_m = model()
+      loaded_m.load(fname)
 
-    self.assertEquals( model.get_probability(word, history),
-        loaded_model.get_probability(word, history) )
+      word = 'CC'
+      history = ['NNP', 'RB', 'JJ']
+
+      self.assertEquals( m.get_probability(word, history),
+          loaded_m.get_probability(word, history) )
 
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@ from Bigram   import Bigram
 from Trigram  import Trigram
 from FourGram import FourGram
 from FiveGram import FiveGram
+from Maxent   import Maxent
 
 class TestModels(unittest.TestCase):
     def setUp(self):
