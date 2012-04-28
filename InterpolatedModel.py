@@ -30,8 +30,9 @@ from Model import Model
 from Unigram import Unigram
 from Bigram import Bigram
 from Trigram import Trigram
-from FourGram import FourGram
-from FiveGram import FiveGram
+from Fourgram import Fourgram
+from Fivegram import Fivegram
+from Sixgram  import Sixgram
 from Maxent import Maxent
 
 try:
@@ -50,6 +51,7 @@ class InterpolatedModel(Model):
                 'trigram',
                 'fourgram',
                 'fivegram',
+                'sixgram',
                 'maxent',
                 ]
 
@@ -79,8 +81,9 @@ class InterpolatedModel(Model):
         add_model( Unigram, 'unigram' )
         add_model( Bigram, 'bigram' )
         add_model( Trigram, 'trigram' )
-        add_model( FourGram, 'fourgram' )
-        add_model( FiveGram, 'fivegram' )
+        add_model( Fourgram, 'fourgram' )
+        add_model( Fivegram, 'fivegram' )
+        add_model( Sixgram, 'sixgram' )
         add_model( Maxent, 'maxent' )
 
         self.models[bigram].backoff_model = self.models[unigram]
@@ -120,8 +123,9 @@ class InterpolatedModel(Model):
         load_model('unigram', Unigram)
         load_model('bigram', Bigram)
         load_model('trigram', Trigram)
-        load_model('fourgram', FourGram)
-        load_model('fivegram', FiveGram)
+        load_model('fourgram', Fourgram)
+        load_model('fivegram', Fivegram)
+        load_model('sixgram', Sixgram)
         load_model('maxent', Maxent)
 
         self.models[bigram].backoff_model = self.models[unigram]

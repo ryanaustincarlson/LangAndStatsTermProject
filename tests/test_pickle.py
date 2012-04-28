@@ -9,8 +9,8 @@ except:
 from Unigram  import Unigram
 from Bigram   import Bigram
 from Trigram  import Trigram
-from FourGram import FourGram
-from FiveGram import FiveGram
+from Fourgram import Fourgram
+from Fivegram import Fivegram
 from Maxent   import Maxent
 
 class TestPickle(unittest.TestCase):
@@ -30,7 +30,7 @@ class TestPickle(unittest.TestCase):
 
 
   def test_model_pickle(self):
-    models  = [Unigram, Bigram, Trigram, FourGram, FiveGram]
+    models  = [Unigram, Bigram, Trigram, Fourgram, Fivegram]
 
     for model in models:
       m = model()

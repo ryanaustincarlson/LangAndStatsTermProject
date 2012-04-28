@@ -4,9 +4,9 @@ import sys
 
 from NgramModel import NgramModel
 
-class FiveGram(NgramModel):
+class Fivegram(NgramModel):
   def __init__(self, filename=None):
-    NgramModel.__init__(self, 5, filename)
+    NgramModel.__init__(self, 3, filename)
 
 def main():
   if len(sys.argv) != 2:
@@ -15,14 +15,12 @@ def main():
 
   training_filename = sys.argv[1]
 
-  model = FiveGram()
+  model = Fivegram()
   model.train(training_filename)
 
-  print model.get_probability('CC', ['NNP', 'RB', 'JJ', 'NNS', 'NNP'])
+  print model.get_probability('CC', ['NNP', 'RB', 'JJ'])
   print model.get_probability('NN', ['NNP', 'RB', 'JJ'])
   print model.get_probability('RB', ['NNP', 'RB', 'JJ'])
 
 if __name__ == '__main__':
   main()
-
-
