@@ -1,3 +1,4 @@
+import functools
 from collections import defaultdict
 from Model import Model
 
@@ -14,19 +15,23 @@ class NgramModelException(Exception):
 
 class NgramModel(Model):
     def __init__(self, n, filename=None):
-    ''' optional filename parameter since we often want to train on initialization '''
+        ''' optional filename parameter since we often want to train on initialization '''
         self.n = n
         if filename: self.train(filename)
 
     def train(self, filename):
         words = [line.strip() for line in open(filename, 'r')]
-        self.ngrams = defaultdict(int)
+        int_def_dict = functools.partial(defaultdict, int)
+        self.ngrams = defaultdict(int_def_dict)
         for i in xrange(len(words) - self.n):
-            seq = tuple(words[i:i+self.n])
-            ngrams[seq] += 1
-        total = float(sum(self.ngrams.values()))
-        for s in self.ngrams:
-            self.ngrams[s] /= total
+            seq = words[i:i+self.n]
+            context = tuple(words[:-1])
+            word = words[-1]
+            self.ngrams[context][word] += 1
+        for context, counts in self.ngrams.items():
+            total = float(sum(counts.values()))
+            for k in counts:
+                counts[k] /= total
   
     def get_probability(self, word, history):
         seq = tuple(history[-(self.n-1):] + [word])
