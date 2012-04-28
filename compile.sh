@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MAXENT_URL='git://github.com/lzhang10/maxent.git'
-SRILM_TARBALL='./resources/srilm.tar.gz'
+SRILM_TARBALL='./resources/srilm.tgz'
 
 BUILD_DIR=build
 MAXENT_DIR=$(basename $MAXENT_URL | perl -npe 's/\.git//')
