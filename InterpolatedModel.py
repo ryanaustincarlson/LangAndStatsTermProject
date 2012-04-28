@@ -56,9 +56,9 @@ class InterpolatedModel(Model):
         logging.basicConfig(level=LOGGING_LEVEL, format="DEBUG: %(message)s")
 
         all_filename = filename
-        directory = all_filename[:all_filename.rfind('/')+1]
-        train_filename = directory + 'train.txt'
-        dev_filename = directory + 'dev.txt'
+        directory = path.dirname(filename)
+        train_filename = path.join(directory, 'train.txt')
+        dev_filename = path.join(directory, 'dev.txt')
 
         dev_percent = 0.1
 
@@ -144,4 +144,4 @@ if __name__ == '__main__':
     model.train(sys.argv[1])
     model.save(sys.argv[2])
 
-    model.load(sys.argv[2])
+    #model.load(sys.argv[2])
