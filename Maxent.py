@@ -10,7 +10,7 @@ import Feature
 class Maxent(Model):
     def __init__(self, history_length=30):
         Model.__init__(self)
-        self.feature_functions = self.load_feature_functions()[:10]
+        self.feature_functions = self.load_feature_functions()
         self.history_length    = history_length
 
     def get_probability(self, word, history):

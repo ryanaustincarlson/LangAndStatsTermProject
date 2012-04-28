@@ -19,6 +19,7 @@ weights on the dev set. Some thoughts on the methods:
 
 """
 
+import os
 import os.path as path
 
 import interpolate, sample, logging, tempfile
@@ -118,6 +119,8 @@ class InterpolatedModel(Model):
         load_model('maxent', Maxent)
 
     def save(self, directory_name):
+        if not path.isdir(directory_name): os.makedirs(directory_name)
+
         with open(path.join(directory_name, 'weights.pkl'), 'w') as f:
             pickle.dump(self.weights, f)        
             logging.debug("Saved weights to disk")
