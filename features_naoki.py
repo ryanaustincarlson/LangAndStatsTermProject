@@ -16,7 +16,7 @@ def trigger_pair_feats(word, history):
     features = []
     for tag_a, tag_b in TAG_PAIRS:
         feature_name = 'feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b)
-        if word == tag_b and tag_a in history[:-3]:
+        if word == tag_b and tag_a in history[:-2]:
             features.append( (feature_name, True) )
         else:
             features.append( (feature_name, False) )
