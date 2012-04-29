@@ -6,7 +6,7 @@ from NgramModel import NgramModel
 
 class Fivegram(NgramModel):
   def __init__(self, filename=None):
-    NgramModel.__init__(self, 3, filename)
+    NgramModel.__init__(self, 5, filename)
 
 def main():
   if len(sys.argv) != 2:
