@@ -4,9 +4,9 @@ import sys
 
 from NgramModel import NgramModel
 
-class Fourgram(NgramModel):
+class Sixgram(NgramModel):
   def __init__(self, filename=None):
-    NgramModel.__init__(self, 3, filename)
+    NgramModel.__init__(self, 6, filename)
 
 def main():
   if len(sys.argv) != 2:
@@ -15,7 +15,7 @@ def main():
 
   training_filename = sys.argv[1]
 
-  model = Fourgram()
+  model = Sixgram()
   model.train(training_filename)
 
   print model.get_probability('CC', ['NNP', 'RB', 'JJ'])

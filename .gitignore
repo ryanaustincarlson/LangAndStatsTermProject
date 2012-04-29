@@ -3,3 +3,4 @@ Session.vim
 *.swp
 *.probs
 build/*
+resources/srilm.tgz

@@ -1,5 +1,25 @@
 #!/usr/bin/env python
 
+def load_pairs(fname):
+    pairs = []
+    with open(fname, 'r') as f:
+        for line in f:
+            a, b, mi = line.strip().split('\t')
+            if float(mi) > 0.001:
+                pairs.append( (a, b) )
+    return pairs
+
+TRIGGER_PAIRS = load_pairs('resources/tagpairs_mutual_information.txt') # OMG FIX ME
+
+def eval(word, history):
+    features = []
+
+    for tag_a, tag_b in TRIGGER_PAIRS:
+        if word == tag_b and tag_a in history[:-3]:
+            features.append( ('feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b)) )
+
+    return features
+
 def tag_count_func(tag):
     def feature_func(word, history):
         return history.count(tag)
@@ -27,15 +47,6 @@ def trigger_pairs_func(tag_a, tag_b):
             return 0
     feature_func.__name__ = 'feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b)
     return feature_func
-
-def load_pairs(fname):
-    pairs = []
-    with open(fname, 'r') as f:
-        for line in f:
-            a, b, mi = line.strip().split('\t')
-            if float(mi) > 0.001:
-                pairs.append( (a, b) )
-    return pairs
 
 def get_feature_funcs(vocab_fname):
     tags      = [line.strip() for line in open(vocab_fname, 'r')]
