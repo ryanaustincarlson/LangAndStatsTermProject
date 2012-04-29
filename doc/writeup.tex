@@ -15,6 +15,23 @@
 
 \section{Contributions}
 
+\subsection{N-gram Models}
+
+To capture short-range dependencies between part of speech tags, we use
+six different N-gram models (unigram, bigram, trigram, etc.). Each of
+the N-gram models is trained by counting the frequencies of each N-gram,
+and the frequencies of each history (N-1 grams). While the lower order
+N-grams are well trained, we expect the higher order models to have
+issues with sparsity. To address this, we use Good-Turing estimates for
+all frequencies less than $8$ (we examined frequency of frequencies for
+all of our models and found that this was a good number). To calculate
+the probability of a word given its history $P(w|h)$, we use the
+following formula:
+
+\[
+    P(w|h) = \frac{P(w,h)}{P(h)} = \frac{f_{GT}(w,h)}{f_{GT}(h)}
+\]
+
 \subsection{Triggers}
 N-grams can not capture long distance information. For example, if we have observed a left parenthesis in a given sentence,
 there is a highly likelihood that we will observe a right parenthesis in the same sentence.
@@ -73,6 +90,23 @@ As expected, we see that $<$LEFTPAR$>$ $\rightarrow$ $<$RIGHTPAR$>$ has a high m
 Similar to Rosenfeld \cite{rosenfeld1996}, we only incorporated pairs that had at least 0.001 bit of average mutual information into our system.
 
 \subsection{Long Distance N-grams}
+
+\subsection{Shallow Parse Tree Constituents}
+
+To introduce aspects of syntax into our toolkit, we defined a number of
+binary valued ``chunk rule'' features for our maximum entropy model. The
+general idea is to use a number of production rules taken from a
+context-free grammar to check for higher level syntactic structure. For
+example, suppose that the current history of characters in the token
+stream is \texttt{DT NN VB NN PP DT}, and we want to know the
+probability that the next token is \texttt{NN}. If we have the following
+production rule defined in our shallow grammar file, then the feature
+\texttt{feature_PP} will be true when calculating the probability
+\texttt{P(NN|DT NN VB NN PP DT)}.
+
+\begin{verbatim}
+PP -> PP DT NN
+\end{verbatim}
 
 \section{Comments and Suggestions}
 
