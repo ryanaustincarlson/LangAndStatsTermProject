@@ -4,3 +4,6 @@ Session.vim
 *.probs
 build/*
 resources/srilm.tgz
+*.aux
+*.dvi
+*.log

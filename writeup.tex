@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{moreverb}
+\usepackage{url}
+\usepackage{verbatim}
+
+\begin{document} 
+
+\title{{11-761 Language and Statistics\\Spring 2012\\Course Project}}
+\author{Ryan Carlson, Naoki Orii, Peter Schulam}
+\maketitle
+
+\section{Description of the Toolkit}
+
+\section{Contributions}
+
+\subsection{Triggers}
+N-grams can not capture long distance information. For example, if we have observed a left parenthesis in a given sentence,
+there is a highly likelihood that we will observe a right parenthesis in the same sentence.
+We capture this long distance information by adding triggers pairs as feature functions.
+To formulate a trigger pair $A \rightarrow B$ as a constraint, we define the feature function $f_{A \rightarrow B}$ as:
+\[
+  f_{A \rightarrow B}(h, w) = \begin{cases}
+    1 & (\text{if} A \in h, w = B) \\
+    0 & (otherwise)
+  \end{cases}
+\]
+where $h$ and $w$ denote the history and the word, respectively.
+
+Using the training data, we computed the average mutual information for the 1089 possible triggers pairs.
+In Table \ref{t:triggerpairs}, we list trigger pairs and their corresponding mutual information (MI) values, sorted by decreasing order of MI.
+
+\begin{table*}[h!]
+\begin{small}
+\begin{center}
+\caption{Trigger {\sf A} for word {\sf B}, sorted by MI in decreasing order}
+\label{t:triggerpairs}
+\begin{tabular}{|l|l|l|}
+\hline
+{\sf A} & {\sf B} & {\sf Mutual Information} \\
+\hline
+CD & CD & 0.00933 \\
+$<$LEFTPAR$>$ & $<$RIGHTPAR$>$ & 0.00443 \\
+$<$PERIOD$>$ & $<$PERIOD$>$ & 0.00431 \\
+VBD & VBD & 0.00307 \\
+NNP & NNP & 0.00302 \\
+VBZ & CD & 0.00279 \\
+PRP & CD & 0.00259 \\
+$<$COLON$>$ & $<$COLON$>$ & 0.00248 \\
+VB & CD & 0.00233 \\
+VBZ & VBD & 0.00226 \\
+VBP & CD & 0.00196 \\
+VBD & VBZ & 0.00169 \\
+PRP & PRP & 0.00151 \\
+VBZ & VBZ & 0.00145 \\
+VBD & VBP & 0.00144 \\
+VBP & VBP & 0.00141 \\
+VBP & VBD & 0.00140 \\
+VBD & CD & 0.00131 \\
+RB & CD & 0.00123 \\
+DT & CD & 0.00113 \\
+MD & CD & 0.000944 \\
+\hline
+\end{tabular}\vspace*{-5mm}
+\end{center}
+\end{small}
+\end{table*}
+
+\noindent
+It can be seen from the table that {\em self-triggers}, or words that trigger themselves (such as CD $\rightarrow$ CD).
+As expected, we see that $<$LEFTPAR$>$ $\rightarrow$ $<$RIGHTPAR$>$ has a high mutual information.
+Similar to Rosenfeld \cite{rosenfeld1996}, we only incorporated pairs that had at least 0.001 bit of average mutual information into our system.
+
+\subsection{Long Distance N-grams}
+
+\section{Comments and Suggestions}
+
+
+\begin{thebibliography}{}
+
+\bibitem{rosenfeld1996} 
+R. Rosenfeld,
+``A Maximum Entropy Approach to Adaptive Statistical Language Modeling,''
+{\em Computer, Speech, and Language}, vol. 10, pp.187-228, 1996.
+
+\end{thebibliography}
+
+\end{document}

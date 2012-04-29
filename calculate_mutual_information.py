@@ -29,12 +29,21 @@ def entropy(counts):
 
 def calc_mutual_information(A, B):
     data = load_data('data/trainA.txt')
+    period = '<PERIOD>'
 
     As = []
     Bs = []
 
     for word, history in data:
-        As.append( A in history[:-2] )
+        hist = list(history[:-2])
+        hist.reverse()
+
+        if not period in hist:
+            As.append( A in hist )
+        else:
+            period_index = hist.index('<PERIOD>')
+            As.append( A in hist[:period_index] )
+
         Bs.append( word == B)
 
     counts_AB = np.histogram2d(As, Bs, bins=2)[0]
