@@ -64,13 +64,32 @@ def distance_two_trigram(word, history):
                 features.append( (feature_name, val) )
     return features
 
+def distance_two_bigram_approx(word, history):
+    """Approximate calculation to make it faster"""
+    tag1 = history[-2]
+    tag2 = word
+    feature_name = 'feature_distance_two_bigram_approx_{0}_{1}'.format(tag1, tag2)
+    features = [(feature_name, True)]
+    return features
+
+def distance_two_trigram_approx(word, history):
+    """Approximate calculation to make it faster"""
+    tag1 = history[-3]
+    tag2 = history[-2]
+    tag3 = word
+    feature_name = 'feature_distance_two_trigram_approx_{0}_{1}_{2}'.format(tag1, tag2, tag3)
+    features = [(feature_name, True)]
+    return features
+
 def eval(word, history):
     feature_funcs = [
             trigger_pair_feats,
             distance_from_last_tag_feats,
             tag_count_feats,
-            distance_two_bigram,
+            # distance_two_bigram,
             # distance_two_trigram,
+            distance_two_bigram_approx,
+            distance_two_trigram_approx,
             ]
 
     features = []
