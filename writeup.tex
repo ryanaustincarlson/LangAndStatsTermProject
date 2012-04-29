@@ -15,6 +15,23 @@
 
 \section{Contributions}
 
+\subsection{N-gram Models}
+
+To capture short-range dependencies between part of speech tags, we use
+six different N-gram models (unigram, bigram, trigram, etc.). Each of
+the N-gram models is trained by counting the frequencies of each N-gram,
+and the frequencies of each history (N-1 grams). While the lower order
+N-grams are well trained, we expect the higher order models to have
+issues with sparsity. To address this, we use Good-Turing estimates for
+all frequencies less than $8$ (we examined frequency of frequencies for
+all of our models and found that this was a good number). To calculate
+the probability of a word given its history $P(w|h)$, we use the
+following formula:
+
+\[
+    P(w|h) = \frac{P(w,h)}{P(h)} = \frac{f_{GT}(w,h)}{f_{GT}(h)}
+\]
+
 \subsection{Triggers}
 N-grams can not capture long distance information. For example, if we have observed a left parenthesis in a given sentence,
 there is a highly likelihood that we will observe a right parenthesis in the same sentence.
