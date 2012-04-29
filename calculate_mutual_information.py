@@ -34,7 +34,7 @@ def calc_mutual_information(A, B):
     Bs = []
 
     for word, history in data:
-        As.append( A in history[:-3] )
+        As.append( A in history[:-2] )
         Bs.append( word == B)
 
     counts_AB = np.histogram2d(As, Bs, bins=2)[0]
