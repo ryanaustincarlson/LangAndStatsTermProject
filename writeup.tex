@@ -74,6 +74,23 @@ Similar to Rosenfeld \cite{rosenfeld1996}, we only incorporated pairs that had a
 
 \subsection{Long Distance N-grams}
 
+\subsection{Shallow Parse Tree Constituents}
+
+To introduce aspects of syntax into our toolkit, we defined a number of
+binary valued ``chunk rule'' features for our maximum entropy model. The
+general idea is to use a number of production rules taken from a
+context-free grammar to check for higher level syntactic structure. For
+example, suppose that the current history of characters in the token
+stream is \texttt{DT NN VB NN PP DT}, and we want to know the
+probability that the next token is \texttt{NN}. If we have the following
+production rule defined in our shallow grammar file, then the feature
+\texttt{feature_PP} will be true when calculating the probability
+\texttt{P(NN|DT NN VB NN PP DT)}.
+
+\begin{verbatim}
+PP -> PP DT NN
+\end{verbatim}
+
 \section{Comments and Suggestions}
 
 
