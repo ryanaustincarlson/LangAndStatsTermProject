@@ -9,18 +9,25 @@ constituent.
 from collections import defaultdict
 import pdb
 
-_my_features = get_feature_funcs('resources/valid_rules.txt')
+vocabulary = [l.strip() for l in open('data/vocabulary.txt')]
 
 def eval(word, history):
     feats = []
     for func in _my_features:
         feats.append((func.__name__, func(word, history)))
+    feats.extend(unigram_features(word, history))
     return feats
 
 def get_feature_funcs(rule_filename):
     feature_funcs = [grammar_rule_to_function(n, c)
                      for n, c in grammar_rule_dict(rule_filename).items()]
     return feature_funcs
+
+def unigram_features(word, history):
+    if len(history) > 1:
+        return [('unigram_{}'.format(v), history[-1] == v) for v in vocabulary]
+    else:
+        return [('unigram_{}'.format(v), False) for v in vocabulary]
 
 def grammar_rule_dict(filename):
     rule_dict = defaultdict(list)
@@ -47,6 +54,8 @@ def grammar_rule_to_function(name, constits):
 def grammar_rules_from_file(filename):
     for line in (l.strip().split() for l in open(filename)):
         yield (line[0], line[2:])
+
+_my_features = get_feature_funcs('resources/valid_rules.txt')
 
 if __name__ == '__main__':
     test_corpus = [('JJ', ['FOO', 'BAR', 'JJ']),
