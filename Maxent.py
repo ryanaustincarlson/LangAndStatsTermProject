@@ -7,10 +7,11 @@ from maxent.cmaxent import MaxentModel
 from Model import Model
 import Feature
 
+maxent.set_verbose(100)
+
 class Maxent(Model):
     def __init__(self, history_length=30):
         Model.__init__(self)
-        self.feature_functions = self.load_feature_functions()
         self.history_length    = history_length
 
     def get_probability(self, word, history):
@@ -47,10 +48,7 @@ class Maxent(Model):
 
     def generate_features(self, word, history):
         history  = self.pad_history(history)
-        features = []
-        for func in self.feature_functions:
-            val = func(word, history)
-            features.append((func.__name__, val))
+        features = Feature.eval(word, history)
         return features
 
     def pad_history(self, history):
@@ -72,9 +70,6 @@ class Maxent(Model):
         """Loads a maxent model from disk."""
         self.model = MaxentModel()
         self.model.load(filename)
-
-    def load_feature_functions(self):
-        return Feature.load_features()
 
 
 def main():
