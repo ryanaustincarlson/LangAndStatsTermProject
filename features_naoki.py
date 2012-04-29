@@ -9,56 +9,49 @@ def load_pairs(fname):
                 pairs.append( (a, b) )
     return pairs
 
-TRIGGER_PAIRS = load_pairs('resources/tagpairs_mutual_information.txt') # OMG FIX ME
+TAGS      = [line.strip() for line in open('data/vocabulary.txt', 'r')]
+TAG_PAIRS = load_pairs('resources/tagpairs_mutual_information.txt')
 
-def eval(word, history):
+def trigger_pair_feats(word, history):
     features = []
-
-    for tag_a, tag_b in TRIGGER_PAIRS:
+    for tag_a, tag_b in TAG_PAIRS:
+        feature_name = 'feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b)
         if word == tag_b and tag_a in history[:-3]:
-            features.append( ('feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b), True) )
+            features.append( (feature_name, True) )
         else:
-            features.append( ('feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b), False) )
-
+            features.append( (feature_name, False) )
     return features
 
-def tag_count_func(tag):
-    def feature_func(word, history):
-        return history.count(tag)
-
-    feature_func.__name__ = 'feature_count_{0}'.format(tag)
-    return feature_func
-
-def distance_from_last_tag_func(tag):
-    def feature_func(word, history):
+def distance_from_last_tag_feats(word, history):
+    features = []
+    for tag in TAGS:
+        feature_name = 'feature_distance_from_last_{0}'.format(tag)
         if not tag in history:
-            return 0
+            features.append( (feature_name, 0) )
         else:
             hist = list(history)
             hist.reverse()
-            return hist.index(tag) + 1
+            features.append( (feature_name, hist.index(tag) + 1) )
+    return features
 
-    feature_func.__name__ = 'feature_distance_from_last_{0}'.format(tag)
-    return feature_func
+def tag_count_feats(word, history):
+    features = []
+    for tag in TAGS:
+        feature_name = 'feature_count_{0}'.format(tag)
+        features.append( (feature_name, history.count(tag)) )
+    return features
 
-def trigger_pairs_func(tag_a, tag_b):
-    def feature_func(word, history):
-        if word == tag_b and tag_a in history[:-3]:
-            return 1
-        else:
-            return 0
-    feature_func.__name__ = 'feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b)
-    return feature_func
+def eval(word, history):
+    feature_funcs = [
+            trigger_pair_feats,
+            distance_from_last_tag_feats,
+            tag_count_feats,
+            ]
 
-def get_feature_funcs(vocab_fname):
-    tags      = [line.strip() for line in open(vocab_fname, 'r')]
-    tag_pairs = load_pairs('resources/tagpairs_mutual_information.txt')
-
-    feature_funcs = []
-    feature_funcs.extend(tag_count_func(tag) for tag in tags)
-    feature_funcs.extend(distance_from_last_tag_func(tag) for tag in tags)
-    feature_funcs.extend(trigger_pairs_func(tag_a, tag_b) for tag_a, tag_b in tag_pairs)
-    return feature_funcs
+    features = []
+    for func in feature_funcs:
+        features.extend( func(word, history) )
+    return features
 
 if __name__ == '__main__':
     test_corpus = [
