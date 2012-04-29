@@ -70,7 +70,7 @@ def eval(word, history):
             distance_from_last_tag_feats,
             tag_count_feats,
             distance_two_bigram,
-            distance_three_bigram,
+            # distance_two_trigram,
             ]
 
     features = []
