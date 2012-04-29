@@ -9,6 +9,14 @@ constituent.
 from collections import defaultdict
 import pdb
 
+_my_features = get_feature_funcs('resources/valid_rules.txt')
+
+def eval(word, history):
+    feats = []
+    for func in _my_features:
+        feats.append((func.__name__, func(word, history)))
+    return feats
+
 def get_feature_funcs(rule_filename):
     feature_funcs = [grammar_rule_to_function(n, c)
                      for n, c in grammar_rule_dict(rule_filename).items()]
