@@ -21,13 +21,3 @@ python setup.py build;
 python setup.py install --user;
 )
 
-# Install SRILM
-(
-cd $BUILD_DIR
-mkdir $SRILM_DIR
-cd $SRILM_DIR
-tar xzf $SRILM_TARBALL
-MT=`./sbin/machine-type`
-SRILM=`pwd -P`
-make MACHINE_TYPE=$MT SRILM=$SRILM TCL_INCLUDE='-I/usr/include/' TCL_LIBRARY=/usr/lib64/libtclstub8.5.a
-)
