@@ -41,11 +41,36 @@ def tag_count_feats(word, history):
         features.append( (feature_name, history.count(tag)) )
     return features
 
+def distance_two_bigram(word, history):
+    features = []
+    for tag1 in TAGS:
+        for tag2 in TAGS:
+            feature_name = 'feature_distance_two_bigram_{0}_{1}'.format(tag1, tag2)
+            val = True if history[-2] == tag1 and word == tag2 else False
+            features.append( (feature_name, val) )
+    return features
+
+def distance_two_trigram(word, history):
+    features = []
+    for tag1 in TAGS:
+        for tag2 in TAGS:
+            for tag3 in TAGS:
+                feature_name = 'feature_distance_two_trigram_{0}_{1}_{2}'.format(
+                        tag1, tag2, tag3)
+                if history[-3] == tag1 and history[-2] == tag2 and word == tag3:
+                    val = True
+                else:
+                    val = False
+                features.append( (feature_name, val) )
+    return features
+
 def eval(word, history):
     feature_funcs = [
             trigger_pair_feats,
             distance_from_last_tag_feats,
             tag_count_feats,
+            distance_two_bigram,
+            distance_three_bigram,
             ]
 
     features = []
