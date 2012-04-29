@@ -1,11 +1,14 @@
 import functools
 from collections import defaultdict
 from Model import Model
+import pdb
 
 try:
     import cPickle as pickle
 except:
     import pickle
+
+vocabulary = [l.strip() for l in open('data/vocabulary.txt')]
 
 class NgramModelException(Exception):
     def __init__(self, message):
@@ -20,6 +23,15 @@ class NgramModel(Model):
         self.backoff_model = backoff_model
         if filename: self.train(filename)
 
+    @staticmethod
+    def good_turing_estimate(count, freq_counts, cutoff=8):
+        if count > 8:
+            return float(count)
+        elif count == 0:
+            return freq_counts[1] / float(sum(r*c for r, c in freq_counts.items()))
+        else:
+            return float(count + 1) * freq_counts[count+1] / freq_counts[count]
+
     def train(self, filename):
         def get_ngrams(n, words):
             for i in xrange(len(words) - n):
@@ -27,30 +39,51 @@ class NgramModel(Model):
 
         words = [line.strip() for line in open(filename, 'r')]
         ddict_int = functools.partial(defaultdict, int)
-        self.ngrams = defaultdict(ddict_int)
+        self.histories = defaultdict(int)
+        self.ngrams = defaultdict(int)
+        self.hist_freq_counts = defaultdict(int)
+        self.ngram_freq_counts = defaultdict(int)
 
-        for gram in get_ngrams(self.n, words):
-            context = tuple(gram[:-1]) if self.n > 1 else ()
-            word = gram[-1]
-            self.ngrams[context][word] += 1
+        for history in get_ngrams(self.n-1, words):
+            self.histories[tuple(history)] += 1
 
-        for context, counts in self.ngrams.items():
-            total = float(sum(counts.values()))
-            for k in counts:
-                counts[k] /= total
-  
+        for ngram in get_ngrams(self.n, words):
+            self.ngrams[tuple(ngram)] += 1
+
+        for count in self.histories.values():
+            self.hist_freq_counts[count] += 1
+            
+        for count in self.ngrams.values():
+            self.ngram_freq_counts[count] += 1
+
+        self.num_histories = float(sum(self.histories.values()))
+        self.num_ngrams = float(sum(self.ngrams.values()))
+
     def get_probability(self, word, history):
-        context = tuple(history[-(self.n - 1):]) if self.n > 1 else ()
-        if not self.ngrams[context][word] and self.backoff_model:
-            return float(self.backoff_model.get_probability(word, history))
+        if len(history) < self.n - 1:
+            return 0.0
         else:
-            return float(self.ngrams[context][word])
+            history = tuple(history[-(self.n - 1):]) if self.n > 1 else ()
+            ngram = tuple(list(history) + [word])
+            p_wh = self.good_turing_estimate(self.ngrams[ngram], self.ngram_freq_counts) / self.num_ngrams
+            p_h = self.good_turing_estimate(self.histories[history], self.hist_freq_counts) / self.num_histories
+            try:
+                return p_wh / p_h
+            except:
+                pdb.set_trace()
   
     def save(self, filename):
-        pickle.dump(self.ngrams, open(filename, 'w'))
+        pickle_tuple = (self.histories,
+                        self.ngrams,
+                        self.hist_freq_counts,
+                        self.ngram_freq_counts,
+                        self.num_histories,
+                        self.num_ngrams)
+        pickle.dump(pickle_tuple, open(filename, 'w'))
   
     def load(self, filename, backoff_model=None):
-        self.ngrams = pickle.load(open(filename, 'r'))
+        (self.histories, self.ngrams, self.hist_freq_counts,
+         self.ngram_freq_counts, self.num_histories, self.num_ngrams) = pickle.load(open(filename))
         self.backoff_model = backoff_model
     
 def main():
