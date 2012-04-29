@@ -16,7 +16,9 @@ def eval(word, history):
 
     for tag_a, tag_b in TRIGGER_PAIRS:
         if word == tag_b and tag_a in history[:-3]:
-            features.append( ('feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b)) )
+            features.append( ('feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b), True) )
+        else:
+            features.append( ('feature_trigger_pair_{0}_{1}'.format(tag_a, tag_b), False) )
 
     return features
 
