@@ -5,8 +5,8 @@ import sys
 from NgramModel import NgramModel
 
 class Sevengram(NgramModel):
-  def __init__(self, filename=None):
-    NgramModel.__init__(self, 7, filename)
+  def __init__(self):
+    NgramModel.__init__(self, 7)
 
 def main():
   if len(sys.argv) != 2:
