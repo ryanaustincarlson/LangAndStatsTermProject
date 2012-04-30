@@ -76,7 +76,7 @@ class NgramModel(Model):
             return 0.0
         else:
             history = history[-(self.n - 1):] if self.n > 1 else []
-            ngram = tuple(history + [v])
+            ngram = tuple(history + [word])
             all_ngrams = [tuple(history + [v]) for v in vocabulary]
             return good_turing(ngram) / sum(good_turing(n) for n in all_ngrams)
   
