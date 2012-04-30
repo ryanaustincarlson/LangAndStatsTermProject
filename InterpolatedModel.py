@@ -56,7 +56,7 @@ class InterpolatedModel(Model):
                 'sixgram',
                 'sevengram',
                 'eightgram',
-                #'maxent',
+                'maxent',
                 ]
 
     def train(self, filename, output_dir):
@@ -95,7 +95,7 @@ class InterpolatedModel(Model):
         add_model( Sixgram,  'sixgram' )
         add_model( Sevengram, 'sevengram')
         add_model( Eightgram, 'eightgram')
-        #add_model( Maxent,   'maxent' )
+        add_model( Maxent,   'maxent' )
 
         self.models['bigram'].backoff_model   = self.models['unigram']
         self.models['trigram'].backoff_model  = self.models['bigram']
@@ -140,7 +140,7 @@ class InterpolatedModel(Model):
         load_model('sixgram',  Sixgram)
         load_model('sevengram', Sevengram)
         load_model('eightgram', Eightgram)
-        #load_model('maxent',   Maxent)
+        load_model('maxent',   Maxent)
 
         self.models['bigram'].backoff_model   = self.models['unigram']
         self.models['trigram'].backoff_model  = self.models['bigram']
