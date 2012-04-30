@@ -96,7 +96,7 @@ Similar to Rosenfeld \cite{rosenfeld1996}, we only incorporated pairs that had a
 \subsection{Long Distance N-grams}
 
 Long distance $N$-grams are extensions of $N$-grams where a word is predicted from $N-1$-grams some distance back in the history.
-For example, a distance-2 trigram predicts $w_i$ from the history $(w_{i-3}, w_{i-2})$.
+For example, a distance-2 bigram predicts $w_i$ from the history $w_{i-2}$.
 Constraints for distance-$j$ bigram $\{w_1, w_2\}$ can be formulated as follows:
 \[
   f_{\{w_1, w_2\}}^{j}(h, w) = \begin{cases}
