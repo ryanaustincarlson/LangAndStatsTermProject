@@ -18,6 +18,7 @@ def eval(word, history):
         feats.append((func.__name__, func(word, history)))
     feats.extend(unigram_features(word, history))
     feats.extend(bigram_features(word, history))
+    feats.extend(trigram_features(word, history))
     return feats
 
 def get_feature_funcs(rule_filename):
@@ -32,6 +33,16 @@ def bigram_features(word, history):
     if len(history) > 0:
         v1 = history[-1]
         return [('bigram_{}_{}'.format(v1, word), True)]
+    else:
+        return []
+
+def trigram_features(word, history):
+    if len(history) > 1:
+        v1 = history[-2]
+        v2 = history[-1]
+        return [('trigram_{}_{}'.format(v1, v2, word), True)]
+    else:
+        return []
 
 def grammar_rule_dict(filename):
     rule_dict = defaultdict(list)

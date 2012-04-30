@@ -18,19 +18,11 @@ We all wrote the n-gram models together, Peter implemented add-one smoothing to 
 \subsection{N-gram Models}
 
 To capture short-range dependencies between part of speech tags, we use
-six different N-gram models (unigram, bigram, trigram, etc.). Each of
-the N-gram models is trained by counting the frequencies of each N-gram,
-and the frequencies of each history (N-1 grams). While the lower order
-N-grams are well trained, we expect the higher order models to have
-issues with sparsity. To address this, we use Good-Turing estimates for
-all frequencies less than $8$ (we examined frequency of frequencies for
-all of our models and found that this was a good number). To calculate
-the probability of a word given its history $P(w|h)$, we use the
-following formula:
-
-\[
-    P(w|h) = \frac{P(w,h)}{P(h)} = \frac{f_{GT}(w,h)}{f_{GT}(h)}
-\]
+eight different N-gram models (unigram, bigram, trigram, etc.). The
+parameters are estimated using maximum likelihood with pseudo counts to
+avoid assigning N-grams zero probabilities. In addition to the standard
+N-gram models, we also added unigram and bigram features to our maximum
+entropy model. 
 
 \subsection{Triggers}
 N-grams can not capture long distance information.
@@ -116,14 +108,23 @@ general idea is to use a number of production rules taken from a
 context-free grammar to check for higher level syntactic structure. For
 example, suppose that the current history of characters in the token
 stream is \texttt{DT NN VB NN PP DT}, and we want to know the
-probability that the next token is \texttt{NN}. If we have the following
-production rule defined in our shallow grammar file, then the feature
-\texttt{feature\_PP} will be true when calculating the probability
-\texttt{P(NN|DT NN VB NN PP DT)}.
+probability that the next token is \texttt{NN}. If we have the 
+production rule below defined in our shallow grammar file, then the
+feature \texttt{feature\_PP} will be true when calculating the
+probability \texttt{P(NN|DT NN VB NN PP DT)}.
 
 \begin{verbatim}
 PP -> PP DT NN
 \end{verbatim}
+
+We gathered chunk rules by first going through a context free grammar
+for English that we used in another class, and cleaning the part of
+speech tag set used in the grammar to match the ones in our tag set.
+Since there were some tags that did not have any analogues in our set,
+we then kept only those production rules for which the right hand side
+of the rule contained only tags that were in our tag set. This removed
+most of the ``high level'' tags that can only be built higher in a parse
+tree, which is why we call these features ``shallow'' features.
 
 \subsection{Checking For Subset Existence}
 
