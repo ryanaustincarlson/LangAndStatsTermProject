@@ -11,6 +11,8 @@
 
 We linearly interpolated n-gram models for $1 \le n \le 8$ with a maxent model. The n-gram models were implemented by hand in python. For the maxent model we used the ``Maximum Entropy Modeling Toolkit for Python and C++''\footnote{\url{http://homepages.inf.ed.ac.uk/lzhang10/maxent_toolkit.html}} (we used the python bindings). Finally, we used the interpolation code from a previous assignment to linearly interpolate the nine models together.
 
+Our internal evaluation is as follows: 37.59\% accuracy and 8.101 bit/tag\footnote{89.8\%  9.98\%, and 0.2\% of trainA.txt were used as training, dev, and test data, respectively}.
+
 \section{Contributions}
 
 We all wrote the n-gram models together, Peter implemented add-one smoothing to the n-grams, the testing code, and added the maxent features detailed in sections \textbf{ADD SECTIONS REFS HERE}. Naoki set up the maxent model and added maxent features detailed in sections \textbf{ADD SECTION REFS}. Ryan worked on the initial n-gram class, the training code, and maxent features detailed in sections \textbf{ADD SECTION REFS}.
