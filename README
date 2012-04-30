@@ -1,24 +1,26 @@
 Lang & Stats Term Project README
 ================================
 
-Put stuff here!
-
 Dependencies:
 - nltk (http://www.nltk.org/)
 - Maximum Entropy Modeling Toolkit for Python and C++ (http://homepages.inf.ed.ac.uk/lzhang10/maxent_toolkit.html)
 
-Stuff to do:
+How to run the code:
 
-  Naoki:
-    -> TAG counts in history (feature)
-    -> distance from last TAG (feature)
-    -> fix Features module
+# Compile the code
+$ ./compile.sh
 
-  Ryan:
-    -> subsets of 3 (feature)
-    -> interpolation interface
+# Train the model
+$ ./train.sh train.txt train.model # Note that train.model is a directory containing multiple model files
 
-  Peter:
-    -> grammar rules (feature)
-    -> test code (average log likelihood)
-    -> compile script
+# Test the model
+$ ./tester.sh train.model
+
+
+# Explanation of code:
+N-gram models are implemented in Ngrammodel.py, Unigram.py, Bigram.py, ..., Eightgram.py
+The maximum entropy is implemented as Maxent.py
+The interpolation is done by interpolate.py
+Training and interpolation is mainly handled by InterpolatedModel.py
+Testing is handled by write_model_predictions.py
+
