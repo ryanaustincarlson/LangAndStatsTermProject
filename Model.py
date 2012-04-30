@@ -27,6 +27,6 @@ class Model:
     probability_list = self.probability_list(words)
     outfile = open(outfilename, 'w')
     for prob in probability_list:
-      outfile.write('{}\n'.format(prob))
+      outfile.write('{0}\n'.format(prob))
     outfile.close()
 

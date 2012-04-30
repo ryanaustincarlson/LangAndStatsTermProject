@@ -8,7 +8,7 @@ import sys
 def write_data(data, filename):
   f = open(filename, 'w')
   for d in data:
-    f.write('{}\n'.format(d))
+    f.write('{0}\n'.format(d))
   f.close()
 
 def main(args):
