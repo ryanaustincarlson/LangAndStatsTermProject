@@ -15,7 +15,11 @@ Our internal evaluation is as follows: 37.59\% accuracy and 8.101 bit/tag\footno
 
 \section{Contributions}
 
+<<<<<<< HEAD
 We all wrote the n-gram models together, Peter implemented add-one smoothing to the n-grams (and the unsuccessful Good-Turing), the testing code, and added the maxent features detailed in sections \ref{sec:constituent}. Naoki set up the maxent model and added maxent features detailed in sections \ref{sec:trigger} and \ref{sec:longdistance}. Ryan worked on the initial n-gram class, the training code, and maxent features detailed in sections \textbf{ADD SECTION REFS}.
+=======
+We all wrote the n-gram models together, Peter implemented add-one smoothing to the n-grams, the testing code, and added the maxent features detailed in sections \ref{sec:constituent}. Naoki set up the maxent model and added maxent features detailed in sections \ref{sec:trigger} and \ref{sec:longdistance}. Ryan worked on the initial n-gram class, the training code, and maxent features detailed in section \ref{sec:subset-existence}. 
+>>>>>>> 31d23940129e799916e7a46da48e09ef43ce35ad
 
 \subsection{N-gram Models}
 
@@ -129,9 +133,12 @@ Since there were some tags that did not have any analogues in our set,
 we then kept only those production rules for which the right hand side
 of the rule contained only tags that were in our tag set. This removed
 most of the ``high level'' tags that can only be built higher in a parse
-tree, which is why we call these features ``shallow'' features.
+tree, which is why we call these features ``shallow'' features (these
+rules, and the grammar can be found in the \texttt{resources}
+directory).
 
 \subsection{Checking For Subset Existence}
+\label{sec:subset-existence}
 
 In order to get a natural sense of higher-level parts of speech (e.g., nouns, verbs, punctuation) we grouped the tags into the following lists:
 
