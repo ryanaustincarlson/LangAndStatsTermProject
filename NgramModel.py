@@ -65,12 +65,14 @@ class NgramModel(Model):
 
     def get_probability(self, word, history):
         def good_turing(ngram):
-            r = self.ngram_freq_counts[ngram]
-            if r == 0:
-                return self.ngram_freq_counts[1] / self.num_ngrams
+            count = self.ngrams[ngram]
+            if count > 8:
+                return self.ngrams[ngram] / float(self.num_ngrams)
+            elif count == 0:
+                return self.ngram_freq_counts[1] / float(self.num_ngrams)
             else:
-                return float(((r+1)*self.ngram_freq_counts[r+1]
-                              / (self.num_ngrams + self.ngram_freq_counts[r])))
+                return ( (r+1) * self.ngram_freq_counts[r+1] /
+                         self.ngram_freq_counts[r] / self.num_ngrams)
 
         if len(history) < self.n - 1:
             return 0.0
