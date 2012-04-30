@@ -21,6 +21,7 @@ def subsets():
   all_groups.append( ['POS'] ) # possessive ending
   all_groups.append( ['RP'] ) # particle
   all_groups.append( ['TO'] ) # TO
+  all_groups.append( ['CC', 'CD', 'DT', 'EX', 'IN', 'MD', 'POS', 'RP', 'TO'] ) #other
 
   def vocab(group, lookback):
     def subsets_specific(word, history):
