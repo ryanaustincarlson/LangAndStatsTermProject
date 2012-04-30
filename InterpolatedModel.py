@@ -55,13 +55,13 @@ class InterpolatedModel(Model):
                 'maxent',
                 ]
 
-    def train(self, filename):
+    def train(self, filename, output_dir):
         logging.basicConfig(level=LOGGING_LEVEL, format="DEBUG: %(message)s")
 
         all_filename = filename
         directory = path.dirname(filename)
-        train_filename = path.join(directory, 'train.txt')
-        dev_filename = path.join(directory, 'dev.txt')
+        train_filename = path.join(output_dir, 'train.txt')
+        dev_filename = path.join(output_dir, 'dev.txt')
 
         dev_percent = 0.1
 
@@ -96,12 +96,12 @@ class InterpolatedModel(Model):
 
         # write predictions out to disk using dev set
         model_outputs = []
-        output_dir = tempfile.mkdtemp()
-        logging.debug('Temporary Output Directory: {}'.format(output_dir))
+        model_output_dir = tempfile.mkdtemp()
+        logging.debug('Temporary Output Directory: {}'.format(model_output_dir))
         for model_name in self.model_names:
             model = self.models[model_name]
 
-            model_outputs.append( path.join( output_dir, model_name + '.probs' ) )
+            model_outputs.append( path.join( model_output_dir, model_name + '.probs' ) )
             model.write_probability_list(dev_words, model_outputs[-1])
             logging.debug('Wrote dev set predictions using {} model'.format(model_name))
 
@@ -161,7 +161,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     model = InterpolatedModel()
-    model.train(sys.argv[1])
+    model.train(sys.argv[1], sys.argv[2])
     model.save(sys.argv[2])
 
     #model.load(sys.argv[2])
