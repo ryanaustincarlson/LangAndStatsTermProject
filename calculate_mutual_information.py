@@ -35,15 +35,15 @@ def calc_mutual_information(A, B):
     Bs = []
 
     for word, history in data:
-        hist = list(history[:-2])
-        hist.reverse()
+        # hist = list(history[:-2])
+        # hist.reverse()
+        # if not period in hist:
+        #     As.append( A in hist )
+        # else:
+        #     period_index = hist.index('<PERIOD>')
+        #     As.append( A in hist[:period_index] )
 
-        if not period in hist:
-            As.append( A in hist )
-        else:
-            period_index = hist.index('<PERIOD>')
-            As.append( A in hist[:period_index] )
-
+        As.append( A in history )
         Bs.append( word == B)
 
     counts_AB = np.histogram2d(As, Bs, bins=2)[0]
