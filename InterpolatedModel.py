@@ -76,7 +76,7 @@ class InterpolatedModel(Model):
 
         # sample all-data into train and dev sets
         sample.main( [all_filename, train_filename, dev_filename, dev_percent] )
-        logging.debug('Split {} into training ({}) and development ({})'.format(all_filename, train_filename, dev_filename))
+        logging.debug('Split {0} into training ({1}) and development ({2})'.format(all_filename, train_filename, dev_filename))
         
         # train models on training set
         self.models = {}
@@ -85,7 +85,7 @@ class InterpolatedModel(Model):
             self.models[name] = ModelClass()
             self.models[name].train(train_filename)
 
-            logging.debug('Done training {} model'.format(name))
+            logging.debug('Done training {0} model'.format(name))
 
         add_model( Unigram,  'unigram' )
         add_model( Bigram,   'bigram' )
@@ -108,17 +108,17 @@ class InterpolatedModel(Model):
         # write predictions out to disk using dev set
         model_outputs = []
         model_output_dir = tempfile.mkdtemp()
-        logging.debug('Temporary Output Directory: {}'.format(model_output_dir))
+        logging.debug('Temporary Output Directory: {0}'.format(model_output_dir))
         for model_name in self.model_names:
             model = self.models[model_name]
 
             model_outputs.append( path.join( model_output_dir, model_name + '.probs' ) )
             model.write_probability_list(dev_words, model_outputs[-1])
-            logging.debug('Wrote dev set predictions using {} model'.format(model_name))
+            logging.debug('Wrote dev set predictions using {0} model'.format(model_name))
 
         # interpolate the models, get the weights
         weights_list = interpolate.interpolate(model_outputs)
-        logging.debug('Weights: {}'.format(weights_list))
+        logging.debug('Weights: {0}'.format(weights_list))
 
         self.weights = dict( zip( self.model_names, weights_list ) )
 
@@ -130,7 +130,7 @@ class InterpolatedModel(Model):
         def load_model(name, ModelClass):
             self.models[name] = ModelClass()
             self.models[name].load( path.join(directory_name, name + '.pkl') )
-            logging.debug("Loaded {} model from disk".format(name))
+            logging.debug("Loaded {0} model from disk".format(name))
 
         load_model('unigram',  Unigram)
         load_model('bigram',   Bigram)
@@ -157,7 +157,7 @@ class InterpolatedModel(Model):
 
         for name, model in self.models.items():
             model.save(path.join(directory_name, name+'.pkl'))
-            logging.debug("Saved {} model to disk".format(name))
+            logging.debug("Saved {0} model to disk".format(name))
 
     def get_probability(self, word, history):
         prediction = 0
@@ -170,7 +170,7 @@ if __name__ == '__main__':
     import sys
 
     if len(sys.argv) != 3:
-        print 'usage: {} all-data output_dir'.format(sys.argv[0])
+        print 'usage: {0} all-data output_dir'.format(sys.argv[0])
         sys.exit(1)
 
     model = InterpolatedModel()
