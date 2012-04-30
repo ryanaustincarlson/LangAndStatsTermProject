@@ -111,7 +111,7 @@ def interpolate(args):
   models_file = open(directory + 'model-order.txt', 'w')
   for fname in fnames: models_file.write(fname + '\n')
   models_file.close()
-  print 'Model order written to {}'.format(models_file.name)
+  print 'Model order written to {0}'.format(models_file.name)
 
   probabilities = [read_probs_file(fname) for fname in fnames]
 
@@ -128,9 +128,9 @@ def interpolate(args):
   weights = run_algorithm_until_convergence(probabilities, weights, convergence_num)
 
   weights_file = open(directory + 'weights.txt', 'w')
-  for weight in weights: weights_file.write('{}\n'.format(weight))
+  for weight in weights: weights_file.write('{0}\n'.format(weight))
   weights_file.close()
-  print 'Weights written to {}'.format(weights_file.name)
+  print 'Weights written to {0}'.format(weights_file.name)
 
   return weights
 
