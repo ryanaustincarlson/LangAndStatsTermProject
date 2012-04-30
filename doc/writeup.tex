@@ -125,6 +125,36 @@ production rule defined in our shallow grammar file, then the feature
 PP -> PP DT NN
 \end{verbatim}
 
+\subsection{Checking For Subset Existence}
+
+In order to get a natural sense of higher-level parts of speech (e.g., nouns, verbs, punctuation) we grouped the tags into the following lists:
+
+\begin{verbatim}
+[JJ, JJR, JJS] # adjectives
+[NN, NNS, NNP, NNPS] # nouns
+[PRP, PRP$] # pronouns
+[RB, RBR] # adverbs
+[VB, VBD, VBG, VBN, VBP, VBZ] # verbs
+[WDT, WP, WRB] # wh words
+[<COLON>, <COMMA>, <LEFTPAR>, <PERIOD>, <RIGHTPAR>] # punctuation
+[CC] # coordinating conjunction
+[CD] # cardinal number
+[DT] # determiner
+[EX] # existential THERE
+[IN] # preposition or subordinating conjunction
+[MD] # modal
+[POS] # possessive ending
+[RP] # particle
+[TO] # TO
+[CC, CD, DT, EX, IN, MD, POS, RP, TO] #other
+\end{verbatim}
+
+Each of the seven major parts of speech groups are represented, and then each of the rest are in both a singleton group and in a special ``other'' group. We do this because the nine singletons do not really group together in any linguistically meaningful way, so we let the maxent model decide whether or not an ``other'' category has more predictive power than each of the features on their own. We could have taken this a step further and allowed any combination of the features to group together, but this would have both become too computationally expensive and would not have had the linguistic power we wanted.
+
+Now, for each group $G$, a lookback number $i$, and a history \[ H = \{h_1, h_2, \dots, h_n\},\] we check if
+\[ \forall g \in G,\; g \in \{h_{n}, h_{n-1}, \ldots, h_{n-i+1}\}  \]
+For example, suppose $G$ was the group of adjectives (i.e., $g$ could take the value \texttt{JJ}, \texttt{JR}, or \texttt{JJS}) and that the lookback number $i = 2$. Furthermore, suppose the history was \texttt{\{<PERIOD>, DT, JJ, NN\}}. Then the adjective \texttt{JJ} would fire (evaluate to \texttt{True}) because it matches the second to last word in the history. However, if the target group $G$ were determiners, the feature would not fire because the determiner \texttt{DT} is too far in the past.
+
 \section{Comments and Suggestions}
 
 
