@@ -26,16 +26,12 @@ def get_feature_funcs(rule_filename):
     return feature_funcs
 
 def unigram_features(word, history):
-    return [('unigram_{}'.format(v), word == v) for v in vocabulary]
+    return [('unigram_{}'.format(word), True)]
 
 def bigram_features(word, history):
     if len(history) > 0:
-        bigram = tuple([history[-1], word])
-        return [('bigram_{}_{}'.format(v1, v2), bigram == (v1,v2))
-                for v1, v2 in itertools.product(vocabulary, vocabulary)]
-    else:
-        return [('bigram_{}_{}'.format(v1, v2), False)
-                for v1, v2 in itertools.product(vocabulary, vocabulary)]
+        v1 = history[-1]
+        return [('bigram_{}_{}'.format(v1, word), True)]
 
 def grammar_rule_dict(filename):
     rule_dict = defaultdict(list)
