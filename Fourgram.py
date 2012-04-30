@@ -5,8 +5,8 @@ import sys
 from NgramModel import NgramModel
 
 class Fourgram(NgramModel):
-  def __init__(self, filename=None):
-    NgramModel.__init__(self, 4, filename)
+  def __init__(self):
+    NgramModel.__init__(self, 4)
 
 def main():
   if len(sys.argv) != 2:

@@ -5,8 +5,8 @@ import sys
 from NgramModel import NgramModel
 
 class Trigram(NgramModel):
-  def __init__(self, filename=None):
-    NgramModel.__init__(self, 3, filename)
+  def __init__(self):
+    NgramModel.__init__(self, 3)
 
 def main():
   if len(sys.argv) != 2:

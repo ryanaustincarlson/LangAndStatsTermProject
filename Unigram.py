@@ -1,8 +1,8 @@
 from NgramModel import NgramModel
 
 class Unigram(NgramModel):
-  def __init__(self, filename=None):
-    NgramModel.__init__(self, 1, filename)
+  def __init__(self):
+    NgramModel.__init__(self, 1)
 
 def main():
   import sys
