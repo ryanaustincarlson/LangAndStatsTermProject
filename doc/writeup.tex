@@ -33,13 +33,15 @@ following formula:
 \]
 
 \subsection{Triggers}
-N-grams can not capture long distance information. For example, if we have observed a left parenthesis in a given sentence,
-there is a highly likelihood that we will observe a right parenthesis in the same sentence.
+N-grams can not capture long distance information.
+For example, if we have observed a left parenthesis in a given sentence,
+there is a highly likelihood that we will observe a right parenthesis in the same sentence,
+but n-grams will fail to predict this.
 We capture this long distance information by adding triggers pairs as feature functions.
 To formulate a trigger pair $A \rightarrow B$ as a constraint, we define the feature function $f_{A \rightarrow B}$ as:
 \[
   f_{A \rightarrow B}(h, w) = \begin{cases}
-    1 & (\text{if} A \in h, w = B) \\
+    1 & (\textrm{if } A \in h \textrm{ and } w = B) \\
     0 & (otherwise)
   \end{cases}
 \]
@@ -78,6 +80,7 @@ VBD & CD & 0.00131 \\
 RB & CD & 0.00123 \\
 DT & CD & 0.00113 \\
 MD & CD & 0.000944 \\
+... & ... & ... \\
 \hline
 \end{tabular}\vspace*{-5mm}
 \end{center}
@@ -85,11 +88,25 @@ MD & CD & 0.000944 \\
 \end{table*}
 
 \noindent
-It can be seen from the table that {\em self-triggers}, or words that trigger themselves (such as CD $\rightarrow$ CD).
+It can be seen from the table that {\em self-triggers}, or words that trigger themselves (such as CD $\rightarrow$ CD) comprise the majority of the top 10 trigger pairs.
 As expected, we see that $<$LEFTPAR$>$ $\rightarrow$ $<$RIGHTPAR$>$ has a high mutual information.
 Similar to Rosenfeld \cite{rosenfeld1996}, we only incorporated pairs that had at least 0.001 bit of average mutual information into our system.
 
+
 \subsection{Long Distance N-grams}
+
+Long distance $N$-grams are extensions of $N$-grams where a word is predicted from $N-1$-grams some distance back in the history.
+For example, a distance-2 trigram predicts $w_i$ from the history $(w_{i-3}, w_{i-2})$.
+Constraints for distance-$j$ bigram $\{w_1, w_2\}$ can be formulated as follows:
+\[
+  f_{\{w_1, w_2\}}^{j}(h, w) = \begin{cases}
+    1 & (\textrm{if } w_{i-j} = w_1 \textrm{ and } w = w_2) \\
+    0 & (otherwise)
+  \end{cases}
+\]
+
+\noindent
+In our system, we considered distance-2 bigrams and distance-2 trigrams.
 
 \subsection{Shallow Parse Tree Constituents}
 
