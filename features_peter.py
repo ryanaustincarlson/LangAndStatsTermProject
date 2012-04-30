@@ -6,6 +6,7 @@ constituent.
 
 """
 
+import itertools
 from collections import defaultdict
 import pdb
 
@@ -16,6 +17,7 @@ def eval(word, history):
     for func in _my_features:
         feats.append((func.__name__, func(word, history)))
     feats.extend(unigram_features(word, history))
+    feats.extend(bigram_features(word, history))
     return feats
 
 def get_feature_funcs(rule_filename):
@@ -24,10 +26,16 @@ def get_feature_funcs(rule_filename):
     return feature_funcs
 
 def unigram_features(word, history):
-    if len(history) > 1:
-        return [('unigram_{}'.format(v), history[-1] == v) for v in vocabulary]
+    return [('unigram_{}'.format(v), word == v) for v in vocabulary]
+
+def bigram_features(word, history):
+    if len(history) > 0:
+        bigram = tuple([history[-1], word])
+        return [('bigram_{}_{}'.format(v1, v2), bigram == (v1,v2))
+                for v1, v2 in itertools.product(vocabulary, vocabulary)]
     else:
-        return [('unigram_{}'.format(v), False) for v in vocabulary]
+        return [('bigram_{}_{}'.format(v1, v2), False)
+                for v1, v2 in itertools.product(vocabulary, vocabulary)]
 
 def grammar_rule_dict(filename):
     rule_dict = defaultdict(list)
