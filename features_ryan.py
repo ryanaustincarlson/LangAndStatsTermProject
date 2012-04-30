@@ -2,7 +2,7 @@
 
 from pprint import pprint
 
-def subsets():
+def subsets(word, history):
 
   all_groups = []
   all_groups.append( ['JJ','JJR','JJS'] ) # adjectives
@@ -30,7 +30,7 @@ def subsets():
       # in the given group is there
       return reduce(lambda x,y: x or y, [tag in history[-lookback:] for tag in group])
 
-    subsets_specific.__name__ = 'subsets_specific_{0}'.format(group)
+    subsets_specific.__name__ = 'subsets_specific_{0}_lookback_{1}'.format(group, lookback)
     return subsets_specific
 
   min_lookback = 1
@@ -39,9 +39,14 @@ def subsets():
   functions = []
   for lookback in range(min_lookback, max_lookback+1):
     for group in all_groups:
-      functions.append( vocab(group, lookback) )
+      fcn = vocab(group, lookback)
+      functions.append( (fcn.__name__, fcn(word, history)) )
 
   return functions
+
+def eval(word, history):
+  return subsets(word, history)
+
 
 def get_feature_funcs():
   return subsets()
@@ -51,16 +56,10 @@ def main():
   word = 'NNP'
   history = ['NNP', 'CD','<COMMA>']
 
-  #functions = contains()
-  functions = subsets()
-  #functions = contains() + subsets()
-  for fcn in functions:
-    print fcn( word, history ),'\t',
-    print fcn.__name__
-    #if fcn( word, history ):
-    #  print 'hey!'
-    #else:
-    #  print
+  evaluated = eval(word, history)
+  for e in evaluated:
+    if e[1]: print e
+
 
 if __name__ == '__main__': main()
 
