@@ -64,17 +64,21 @@ class NgramModel(Model):
         self.num_ngrams = float(sum(self.ngrams.values()))
 
     def get_probability(self, word, history):
+        def good_turing(ngram):
+            r = self.ngram_freq_counts[ngram]
+            if r == 0:
+                return self.ngram_freq_counts[1] / self.num_ngrams
+            else:
+                return float(((r+1)*self.ngram_freq_counts[r+1]
+                              / (self.num_ngrams + self.ngram_freq_counts[r])))
+
         if len(history) < self.n - 1:
             return 0.0
         else:
-            history = tuple(history[-(self.n - 1):]) if self.n > 1 else ()
-            ngram = tuple(list(history) + [word])
-            p_wh = self.good_turing_estimate(self.ngrams[ngram], self.ngram_freq_counts) / self.num_ngrams
-            p_h = self.good_turing_estimate(self.histories[history], self.hist_freq_counts) / self.num_histories
-            try:
-                return p_wh / p_h
-            except:
-                pdb.set_trace()
+            history = history[-(self.n - 1):] if self.n > 1 else []
+            ngram = tuple(history + [v])
+            all_ngrams = [tuple(history + [v]) for v in vocabulary]
+            return good_turing(ngram) / sum(good_turing(n) for n in all_ngrams)
   
     def save(self, filename):
         pickle_tuple = (self.histories,
