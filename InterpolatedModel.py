@@ -97,11 +97,11 @@ class InterpolatedModel(Model):
         add_model( Eightgram, 'eightgram')
         add_model( Maxent,   'maxent' )
 
-        self.models['bigram'].backoff_model   = self.models['unigram']
-        self.models['trigram'].backoff_model  = self.models['bigram']
-        self.models['fourgram'].backoff_model = self.models['trigram']
-        self.models['fivegram'].backoff_model = self.models['fourgram']
-        self.models['sixgram'].backoff_model  = self.models['fivegram']
+        #self.models['bigram'].backoff_model   = self.models['unigram']
+        #self.models['trigram'].backoff_model  = self.models['bigram']
+        #self.models['fourgram'].backoff_model = self.models['trigram']
+        #self.models['fivegram'].backoff_model = self.models['fourgram']
+        #self.models['sixgram'].backoff_model  = self.models['fivegram']
 
         dev_words = [line.strip() for line in open(dev_filename, 'r')]
 
@@ -142,11 +142,11 @@ class InterpolatedModel(Model):
         load_model('eightgram', Eightgram)
         load_model('maxent',   Maxent)
 
-        self.models['bigram'].backoff_model   = self.models['unigram']
-        self.models['trigram'].backoff_model  = self.models['bigram']
-        self.models['fourgram'].backoff_model = self.models['trigram']
-        self.models['fivegram'].backoff_model = self.models['fourgram']
-        self.models['sixgram'].backoff_model  = self.models['fivegram']
+        #self.models['bigram'].backoff_model   = self.models['unigram']
+        #self.models['trigram'].backoff_model  = self.models['bigram']
+        #self.models['fourgram'].backoff_model = self.models['trigram']
+        #self.models['fivegram'].backoff_model = self.models['fourgram']
+        #self.models['sixgram'].backoff_model  = self.models['fivegram']
 
     def save(self, directory_name):
         if not path.isdir(directory_name): os.makedirs(directory_name)
