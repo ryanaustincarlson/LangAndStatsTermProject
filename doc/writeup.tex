@@ -15,7 +15,7 @@ Our internal evaluation is as follows: 37.59\% accuracy and 8.101 bit/tag\footno
 
 \section{Contributions}
 
-We all wrote the n-gram models together, Peter implemented add-one smoothing to the n-grams, the testing code, and added the maxent features detailed in sections \textbf{ADD SECTIONS REFS HERE}. Naoki set up the maxent model and added maxent features detailed in sections \textbf{ADD SECTION REFS}. Ryan worked on the initial n-gram class, the training code, and maxent features detailed in sections \textbf{ADD SECTION REFS}.
+We all wrote the n-gram models together, Peter implemented add-one smoothing to the n-grams, the testing code, and added the maxent features detailed in sections \ref{sec:constituent}. Naoki set up the maxent model and added maxent features detailed in sections \ref{sec:trigger} and \ref{sec:longdistance}. Ryan worked on the initial n-gram class, the training code, and maxent features detailed in sections \textbf{ADD SECTION REFS}.
 
 \subsection{N-gram Models}
 
@@ -27,6 +27,7 @@ N-gram models, we also added unigram and bigram features to our maximum
 entropy model. 
 
 \subsection{Triggers}
+\label{sec:trigger}
 N-grams can not capture long distance information.
 For example, if we have observed a left parenthesis in a given sentence,
 there is a highly likelihood that we will observe a right parenthesis in the same sentence,
@@ -88,6 +89,7 @@ Similar to Rosenfeld \cite{rosenfeld1996}, we only incorporated pairs that had a
 
 
 \subsection{Long Distance N-grams}
+\label{sec:longdistance}
 
 Long distance $N$-grams are extensions of $N$-grams where a word is predicted from $N-1$-grams some distance back in the history.
 For example, a distance-2 bigram predicts $w_i$ from the history $w_{i-2}$.
@@ -103,6 +105,7 @@ Constraints for distance-$j$ bigram $\{w_1, w_2\}$ can be formulated as follows:
 In our system, we considered distance-2 bigrams and distance-2 trigrams.
 
 \subsection{Shallow Parse Tree Constituents}
+\label{sec:constituent}
 
 To introduce aspects of syntax into our toolkit, we defined a number of
 binary valued ``chunk rule'' features for our maximum entropy model. The
