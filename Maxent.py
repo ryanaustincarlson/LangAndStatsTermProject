@@ -43,7 +43,7 @@ class Maxent(Model):
             m.add_event(features, word)
         m.end_add_event()
 
-        m.train(iter=50)
+        m.train()
         self.model = m
 
     def generate_features(self, word, history):
