@@ -74,13 +74,16 @@ class NgramModel(Model):
                 return ( (r+1) * self.ngram_freq_counts[r+1] /
                          self.ngram_freq_counts[r] / self.num_ngrams)
 
+        def pseudo_count(ngram, pseudo=1):
+            return float(self.ngrams[ngram] + pseudo) / (self.num_ngrams + pseudo*len(vocabulary))
+
         if len(history) < self.n - 1:
             return 0.0
         else:
             history = history[-(self.n - 1):] if self.n > 1 else []
             ngram = tuple(history + [word])
             all_ngrams = [tuple(history + [v]) for v in vocabulary]
-            return good_turing(ngram) / sum(good_turing(n) for n in all_ngrams)
+            return pseudo_count(ngram) / sum(pseudo_count(n) for n in all_ngrams)
   
     def save(self, filename):
         pickle_tuple = (self.histories,
