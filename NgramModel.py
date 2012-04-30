@@ -38,6 +38,10 @@ class NgramModel(Model):
                 yield words[i:i+n]
 
         words = [line.strip() for line in open(filename, 'r')]
+
+        # add nltk words
+        words += [line.strip() for line in open('data/nltk_tags.txt', 'r')]
+
         ddict_int = functools.partial(defaultdict, int)
         self.histories = defaultdict(int)
         self.ngrams = defaultdict(int)
