@@ -1,9 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{moreverb}
-\usepackage{url}
-\usepackage{verbatim}
+\usepackage{graphicx, amsmath, moreverb, url, verbatim, url}
 
 \begin{document} 
 
@@ -13,7 +9,11 @@
 
 \section{Description of the Toolkit}
 
+We linearly interpolated n-gram models for $1 \le n \le 8$ with a maxent model. The n-gram models were implemented by hand in python. For the maxent model we used the ``Maximum Entropy Modeling Toolkit for Python and C++''\footnote{\url{http://homepages.inf.ed.ac.uk/lzhang10/maxent_toolkit.html}} (we used the python bindings). Finally, we used the interpolation code from a previous assignment to linearly interpolate the nine models together.
+
 \section{Contributions}
+
+We all wrote the n-gram models together, Peter implemented add-one smoothing to the n-grams, the testing code, and added the maxent features detailed in sections \textbf{ADD SECTIONS REFS HERE}. Naoki set up the maxent model and added maxent features detailed in sections \textbf{ADD SECTION REFS}. Ryan worked on the initial n-gram class, the training code, and maxent features detailed in sections \textbf{ADD SECTION REFS}.
 
 \subsection{N-gram Models}
 
@@ -149,11 +149,28 @@ In order to get a natural sense of higher-level parts of speech (e.g., nouns, ve
 [CC, CD, DT, EX, IN, MD, POS, RP, TO] #other
 \end{verbatim}
 
-Each of the seven major parts of speech groups are represented, and then each of the rest are in both a singleton group and in a special ``other'' group. We do this because the nine singletons do not really group together in any linguistically meaningful way, so we let the maxent model decide whether or not an ``other'' category has more predictive power than each of the features on their own. We could have taken this a step further and allowed any combination of the features to group together, but this would have both become too computationally expensive and would not have had the linguistic power we wanted.
+Each of the seven major parts of speech groups are represented, and then each
+of the rest are in both a singleton group and in a special ``other'' group. We
+do this because the nine singletons do not really group together in any
+linguistically meaningful way, so we let the maxent model decide whether or
+not an ``other'' category has more predictive power than each of the features
+on their own. We could have taken this a step further and allowed any
+combination of the features to group together, but this would have both become
+too computationally expensive and would not have had the linguistic power we
+wanted.
 
-Now, for each group $G$, a lookback number $i$, and a history \[ H = \{h_1, h_2, \dots, h_n\},\] we check if
+Now, for each group $G$, a lookback number $i$, and a history \[ H = \{h_1,
+h_2, \dots, h_n\},\] we check if
+
 \[ \forall g \in G,\; g \in \{h_{n}, h_{n-1}, \ldots, h_{n-i+1}\}  \]
-For example, suppose $G$ was the group of adjectives (i.e., $g$ could take the value \texttt{JJ}, \texttt{JR}, or \texttt{JJS}) and that the lookback number $i = 2$. Furthermore, suppose the history was \texttt{\{<PERIOD>, DT, JJ, NN\}}. Then the adjective \texttt{JJ} would fire (evaluate to \texttt{True}) because it matches the second to last word in the history. However, if the target group $G$ were determiners, the feature would not fire because the determiner \texttt{DT} is too far in the past.
+
+For example, suppose $G$ was the group of adjectives (i.e., $g$ could take the
+value \texttt{JJ}, \texttt{JR}, or \texttt{JJS}) and that the lookback number
+$i = 2$. Furthermore, suppose the history was \texttt{\{<PERIOD>, DT, JJ,
+NN\}}. Then the adjective \texttt{JJ} would fire (evaluate to \texttt{True})
+because it matches the second to last word in the history. However, if the
+target group $G$ were determiners, the feature would not fire because the
+determiner \texttt{DT} is too far in the past.
 
 \section{Comments and Suggestions}
 
