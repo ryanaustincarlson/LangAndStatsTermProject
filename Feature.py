@@ -23,5 +23,5 @@ def eval(word, history):
     features = []
     features.extend( features_naoki.eval(word, history) )
     features.extend( features_peter.eval(word, history) )
-    # features.extend( features_ryan.eval(word, history) )
+    features.extend( features_ryan.eval(word, history) )
     return features
