@@ -27,12 +27,12 @@ def get_feature_funcs(rule_filename):
     return feature_funcs
 
 def unigram_features(word, history):
-    return [('unigram_{}'.format(word), True)]
+    return [('unigram_{0}'.format(word), True)]
 
 def bigram_features(word, history):
     if len(history) > 0:
         v1 = history[-1]
-        return [('bigram_{}_{}'.format(v1, word), True)]
+        return [('bigram_{0}_{1}'.format(v1, word), True)]
     else:
         return []
 
@@ -40,7 +40,7 @@ def trigram_features(word, history):
     if len(history) > 1:
         v1 = history[-2]
         v2 = history[-1]
-        return [('trigram_{}_{}'.format(v1, v2, word), True)]
+        return [('trigram_{0}_{1}'.format(v1, v2, word), True)]
     else:
         return []
 
